@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Providers from "@/providers";
 import { AntdRegistry } from '@ant-design/nextjs-registry';
+import { AuthGuard } from '@/components/auth-guard';
+import 'antd/dist/reset.css';
 
 export const metadata: Metadata = {
   title: "GoAgent",
@@ -36,9 +38,11 @@ export default function RootLayout({
         <link rel="manifest" href="/favicon/site.webmanifest" />
       </head>
       <body className={`antialiased`}>
-        <AntdRegistry>
-          <Providers>{children}</Providers>
-        </AntdRegistry>
+        <AuthGuard>
+          <AntdRegistry>
+            <Providers>{children}</Providers>
+          </AntdRegistry>
+        </AuthGuard>
       </body>
     </html>
   );
