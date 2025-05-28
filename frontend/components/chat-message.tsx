@@ -256,14 +256,14 @@ const ChatMessage = ({
         {isCompleted && (
           <div className="flex gap-x-2 items-center bg-[#25BA3B1E] text-green-600 text-sm p-2 rounded-full">
             <Check className="size-4" />
-            <span>II-Agent has completed the current task.</span>
+            <span>GoAgent has completed the current task.</span>
           </div>
         )}
 
         {isStopped && (
           <div className="flex gap-x-2 items-center bg-[#ffbf361f] text-yellow-300 text-sm p-2 rounded-full">
             <CircleStop className="size-4" />
-            <span>II-Agent has stopped, send a new message to continue.</span>
+            <span>GoAgent has stopped, send a new message to continue.</span>
           </div>
         )}
 

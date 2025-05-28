@@ -868,7 +868,7 @@ export default function Home() {
       {!isInChatView && (
         <Image
           src="/logo-only.png"
-          alt="II-Agent Logo"
+          alt="GoAgent Logo"
           width={80}
           height={80}
           className="rounded-sm"
@@ -890,13 +890,13 @@ export default function Home() {
           {isInChatView && (
             <Image
               src="/logo-only.png"
-              alt="II-Agent Logo"
+              alt="GoAgent Logo"
               width={40}
               height={40}
               className="rounded-sm"
             />
           )}
-          {`II-Agent`}
+          {`GoAgent`}
         </motion.h1>
         {isInChatView ? (
           <div className="flex gap-x-2">
@@ -925,7 +925,7 @@ export default function Home() {
           <AnimatePresence mode="wait">
             {!isInChatView ? (
               <QuestionInput
-                placeholder="Give II-Agent a task to work on..."
+                placeholder="Give GoAgent a task to work on..."
                 value={currentQuestion}
                 setValue={setCurrentQuestion}
                 handleKeyDown={handleKeyDown}

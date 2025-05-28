@@ -137,7 +137,7 @@ const SidebarButton = ({ className, workspaceInfo }: SidebarButtonProps) => {
                   <span
                     className={`text-white text-lg font-serif ${orbitron.className}`}
                   >
-                    II-Agent
+                    GoAgent
                   </span>
                 </div>
               </div>
