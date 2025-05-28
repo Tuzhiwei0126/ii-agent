@@ -37,6 +37,8 @@ from anthropic.types.message_create_params import (
     ToolChoiceToolChoiceAuto,
     ToolChoiceToolChoiceTool,
 )
+from httpx import Client
+import os
 
 
 from ii_agent.llm.base import (
@@ -78,8 +80,16 @@ class AnthropicDirectClient(LLMClient):
             )
         else:
             api_key = os.getenv("ANTHROPIC_API_KEY")
+            print(os.getenv("ANTHROPIC_API_KEY"))
+            http_client = Client()
+            http_proxy = os.getenv("http_proxy") or os.getenv("https_proxy")
+            print(http_proxy)
+            if http_proxy:
+                http_client.proxy = http_proxy
+
             self.client = anthropic.Anthropic(
                 api_key=api_key, max_retries=1, timeout=60 * 5
+                ,http_client=http_client
             )
             model_name = model_name.replace(
                 "@", "-"
