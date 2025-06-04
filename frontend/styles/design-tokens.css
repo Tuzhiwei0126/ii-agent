@@ -48,75 +48,95 @@
   --font-mono: var(--font-geist-mono);
 }
 
-/* Light Theme Mapping */
+/* Light Theme (Default) */
 :root {
-  /* Core UI Colors */
-  --background: var(--color-white);
-  --foreground: var(--color-gray-800);
+  /* 主色调 */
+  --primary: #6B48FF;
+  --primary-light: #E0DBF6;
+  --primary-lighter: #F5F5FF;
+  
+  /* 背景色 */
+  --background: #FFFFFF;
+  --background-dark: #FAFAFA;
+  
+  /* 文本颜色 */
+  --text-primary: #1A1A1A;
+  --text-secondary: #666666;
+  --text-tertiary: #999999;
+  
+  /* 边框颜色 */
+  --border: #E5E7EB;
+  --border-dark: #D1D5DB;
+  
+  /* 状态颜色 */
+  --success: #10B981;
+  --warning: #F59E0B;
+  --error: #EF4444;
+  --info: #3B82F6;
 
-  /* Component Colors */
+  /* Core UI Colors */
+  --foreground: var(--color-gray-800);
   --card: var(--color-white);
   --card-foreground: var(--color-gray-800);
-
   --popover: var(--color-white);
   --popover-foreground: var(--color-gray-800);
-
-  --primary: var(--color-gray-700);
   --primary-foreground: var(--color-gray-50);
-
   --secondary: var(--color-gray-100);
   --secondary-foreground: var(--color-gray-700);
-
   --muted: var(--color-gray-100);
   --muted-foreground: var(--color-gray-400);
-
   --accent: var(--color-gray-100);
   --accent-foreground: var(--color-gray-700);
-
-  /* Semantic Colors */
   --destructive: var(--color-danger-dark);
   --destructive-foreground: var(--color-danger-dark);
-
-  /* Form & Interactive */
-  --border: var(--color-gray-200);
   --input: var(--color-gray-200);
   --ring: var(--color-gray-300);
-
-  /* Layout */
   --radius: var(--spacing-base);
 }
 
-/* Dark Theme Mapping */
+/* Dark Theme */
 .dark {
-  /* Core UI Colors */
-  --background: var(--color-gray-800);
-  --foreground: var(--color-gray-50);
+  /* 主色调 */
+  --primary: #8B6CFF;
+  --primary-light: #2D1F5C;
+  --primary-lighter: #1A1A2E;
+  
+  /* 背景色 */
+  --background: #111827;
+  --background-dark: #1F2937;
+  
+  /* 文本颜色 */
+  --text-primary: #F9FAFB;
+  --text-secondary: #E5E7EB;
+  --text-tertiary: #9CA3AF;
+  
+  /* 边框颜色 */
+  --border: #374151;
+  --border-dark: #4B5563;
+  
+  /* 状态颜色 */
+  --success: #34D399;
+  --warning: #FBBF24;
+  --error: #F87171;
+  --info: #60A5FA;
 
-  /* Component Colors */
+  /* Core UI Colors */
+  --foreground: var(--color-gray-50);
   --card: var(--color-gray-800);
   --card-foreground: var(--color-gray-50);
-
   --popover: var(--color-gray-800);
   --popover-foreground: var(--color-gray-50);
-
-  --primary: var(--color-gray-50);
   --primary-foreground: var(--color-gray-700);
-
   --secondary: var(--color-gray-600);
   --secondary-foreground: var(--color-gray-50);
-
   --muted: var(--color-gray-600);
   --muted-foreground: var(--color-gray-300);
-
   --accent: var(--color-gray-600);
   --accent-foreground: var(--color-gray-50);
-
-  /* Semantic Colors */
   --destructive: var(--color-danger-darker);
   --destructive-foreground: var(--color-danger-light);
-
-  /* Form & Interactive */
-  --border: var(--color-gray-600);
   --input: var(--color-gray-600);
   --ring: var(--color-gray-500);
 }
+
+/* 查看是否有自定义的颜色定义 */

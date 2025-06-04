@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
-import "./globals.css";
+import "../styles/globals.css";
 import Providers from "@/providers";
 import { AntdRegistry } from '@ant-design/nextjs-registry';
 import { AuthGuard } from '@/components/auth-guard';
+import { ThemeProvider } from '@/components/theme-provider';
 import 'antd/dist/reset.css';
 
 export const metadata: Metadata = {
-  title: "GoAgent",
-  description: "GoAgent is a tool for in-depth analysis and research.",
+  title: "II Agent",
+  description: "Intelligent Interface Agent",
 };
 
 export default function RootLayout({
@@ -16,7 +17,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="zh-CN" suppressHydrationWarning>
       <head>
         <link
           rel="apple-touch-icon"
@@ -38,11 +39,13 @@ export default function RootLayout({
         <link rel="manifest" href="/favicon/site.webmanifest" />
       </head>
       <body className={`antialiased`}>
-        <AuthGuard>
-          <AntdRegistry>
-            <Providers>{children}</Providers>
-          </AntdRegistry>
-        </AuthGuard>
+        <ThemeProvider>
+          <AuthGuard>
+            <AntdRegistry>
+              <Providers>{children}</Providers>
+            </AntdRegistry>
+          </AuthGuard>
+        </ThemeProvider>
       </body>
     </html>
   );

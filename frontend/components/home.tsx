@@ -863,7 +863,7 @@ export default function Home() {
   }, [messages?.length]);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-[#191E1B]">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-[#1a1625]">
       <SidebarButton />
       {!isInChatView && (
         <Image
@@ -871,7 +871,7 @@ export default function Home() {
           alt="GoAgent Logo"
           width={80}
           height={80}
-          className="rounded-sm"
+          className="rounded-sm drop-shadow-[0_0_15px_rgba(147,51,234,0.3)]"
         />
       )}
       <div
@@ -881,9 +881,9 @@ export default function Home() {
       >
         {!isInChatView && <div />}
         <motion.h1
-          className={`font-semibold text-center ${
-            isInChatView ? "flex items-center gap-x-2 text-2xl" : "text-4xl"
-          } ${orbitron.className}`}
+          className={`font-semibold text-center bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent
+            ${isInChatView ? "flex gap-x-2 items-center text-2xl" : "text-4xl"}
+            ${orbitron.className}`}
           layout
           layoutId="page-title"
         >
@@ -901,7 +901,7 @@ export default function Home() {
         {isInChatView ? (
           <div className="flex gap-x-2">
             <Button
-              className="cursor-pointer h-10"
+              className="h-10 cursor-pointer"
               variant="outline"
               onClick={handleShare}
             >
@@ -916,9 +916,9 @@ export default function Home() {
         )}
       </div>
       {isLoadingSession ? (
-        <div className="flex flex-col items-center justify-center p-8">
-          <Loader2 className="h-8 w-8 text-white animate-spin mb-4" />
-          <p className="text-white text-lg">Loading session history...</p>
+        <div className="flex flex-col justify-center items-center p-8">
+          <Loader2 className="mb-4 w-8 h-8 text-white animate-spin" />
+          <p className="text-lg text-white">Loading session history...</p>
         </div>
       ) : (
         <LayoutGroup>
@@ -950,7 +950,7 @@ export default function Home() {
                   damping: 30,
                   mass: 1,
                 }}
-                className="w-full grid grid-cols-10 write-report overflow-hidden flex-1 pr-4 pb-4 "
+                className="grid overflow-hidden flex-1 grid-cols-10 pr-4 pb-4 w-full write-report"
               >
                 <ChatMessage
                   messages={messages}
@@ -976,13 +976,13 @@ export default function Home() {
                   handleEditMessage={handleEditMessage}
                 />
 
-                <div className="col-span-6 bg-[#1e1f23] border border-[#3A3B3F] p-4 rounded-2xl">
-                  <div className="pb-4 bg-neutral-850 flex items-center justify-between">
+                <div className="col-span-6 bg-[#231c2d] border border-purple-900/30 p-4 rounded-2xl">
+                  <div className="flex justify-between items-center pb-4 bg-neutral-850">
                     <div className="flex gap-x-4">
                       <Button
-                        className={`cursor-pointer hover:!bg-black ${
+                        className={`cursor-pointer hover:!bg-purple-900/20 ${
                           activeTab === TAB.BROWSER
-                            ? "bg-gradient-skyblue-lavender !text-black"
+                            ? "bg-gradient-to-r from-purple-500 to-purple-700 !text-white"
                             : ""
                         }`}
                         variant="outline"
@@ -991,9 +991,9 @@ export default function Home() {
                         <Globe className="size-4" /> Browser
                       </Button>
                       <Button
-                        className={`cursor-pointer hover:!bg-black ${
+                        className={`cursor-pointer hover:!bg-purple-900/20 ${
                           activeTab === TAB.CODE
-                            ? "bg-gradient-skyblue-lavender !text-black"
+                            ? "bg-gradient-to-r from-purple-500 to-purple-700 !text-white"
                             : ""
                         }`}
                         variant="outline"
@@ -1002,9 +1002,9 @@ export default function Home() {
                         <Code className="size-4" /> Code
                       </Button>
                       <Button
-                        className={`cursor-pointer hover:!bg-black ${
+                        className={`cursor-pointer hover:!bg-purple-900/20 ${
                           activeTab === TAB.TERMINAL
-                            ? "bg-gradient-skyblue-lavender !text-black"
+                            ? "bg-gradient-to-r from-purple-500 to-purple-700 !text-white"
                             : ""
                         }`}
                         variant="outline"
@@ -1014,7 +1014,7 @@ export default function Home() {
                       </Button>
                     </div>
                     <Button
-                      className="cursor-pointer"
+                      className="cursor-pointer border-purple-500/30 hover:border-purple-500"
                       variant="outline"
                       onClick={handleOpenVSCode}
                     >

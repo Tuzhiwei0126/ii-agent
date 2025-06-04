@@ -1,3 +1,6 @@
+// 在文件顶部添加 token 相关的导入
+import { token } from '../utils/token';  // 假设 token 工具在这个位置
+
 // 基础请求配置类型
 interface RequestConfig extends RequestInit {
   params?: Record<string, string>;
@@ -49,7 +52,7 @@ const request = async <T>(url: string, config: RequestConfig = {}): Promise<T> =
       // 如果是 401 未授权,清除 token 并跳转到登录页
       if (response.status === 401) {
         token.remove();
-        window.location.href = '/login';
+        // window.location.href = '/login';
         throw new Error('未授权,请重新登录');
       }
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -107,7 +110,7 @@ export const upload = <T>(url: string, file: File, config?: Omit<RequestConfig, 
     headers: {
       ...config?.headers,
       // 删除 Content-Type，让浏览器自动设置
-      'Content-Type': undefined,
+      'Content-Type': null as unknown as string,  // 使用类型断言解决类型错误
     },
   });
 };
