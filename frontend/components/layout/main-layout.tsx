@@ -20,7 +20,7 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
 
       {/* 主内容区域 */}
       <div className="overflow-hidden flex-1 bg-white">
-        <div className="mt-4 h-full overflow-y-auto rounded-tl-2xl p-6
+        <div className="mt-4 h-full mr-4 overflow-y-auto rounded-tl-2xl p-6
           shadow-[inset_0_0_10px_rgba(225,218,255,0.5),inset_0_4px_12px_rgba(225,218,255,0.3)]">
           {children}
         </div>

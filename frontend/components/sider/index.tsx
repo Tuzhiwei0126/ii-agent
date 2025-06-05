@@ -77,7 +77,7 @@ export default function Sidebar() {
     <div
       className={`${
         collapsed ? 'w-18' : 'w-50'
-      } h-screen bg-white border-r border-gray-200 flex flex-col transition-all duration-300 px-3 py-6`}
+      } h-screen bg-white  border-gray-200 flex flex-col transition-all duration-300 px-3 py-6`}
     >
       {/* Logo + Toggle */}
       <div className="flex justify-between items-center px-1 mb-8">

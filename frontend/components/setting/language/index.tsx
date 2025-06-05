@@ -1,12 +1,11 @@
 'use client'
 
 import { useState } from 'react'
-import { RiArrowDownSLine, RiCheckLine } from '@remixicon/react'
+import { RiArrowDownSLine, RiCheckLine, RiGlobalLine } from '@remixicon/react'
 
 export default function LanguageSetting() {
   const [selectedLanguage, setSelectedLanguage] = useState('zh-CN')
   const [showDropdown, setShowDropdown] = useState(false)
-  const [displayMode, setDisplayMode] = useState<'dropdown' | 'buttons'>('dropdown')
 
   const languages = [
     { 
@@ -67,142 +66,134 @@ export default function LanguageSetting() {
   }
 
   return (
-    <div className="px-6 pb-6">
+    <div className="p-8 space-y-8">
       <div className="mb-8">
-        <h3 className="mb-2 text-xl font-semibold text-gray-900">语言设置</h3>
-        <p className="text-sm text-gray-600">选择您偏好的界面语言</p>
+        <h3 className="text-2xl font-bold text-gray-900 mb-2">语言设置</h3>
+        <p className="text-gray-600">选择您偏好的界面语言</p>
       </div>
 
-      <div className="space-y-6">
-        {/* 显示模式切换 */}
-        <div className="p-5 rounded-xl border border-gray-100 bg-gray-50/60">
-          <h4 className="mb-4 font-semibold text-gray-900">选择展示方式</h4>
-          <div className="flex space-x-4">
-            <button
-              onClick={() => setDisplayMode('dropdown')}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                displayMode === 'dropdown'
-                  ? 'bg-purple-600 text-white'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-              }`}
-            >
-              下拉框模式
-            </button>
-            <button
-              onClick={() => setDisplayMode('buttons')}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                displayMode === 'buttons'
-                  ? 'bg-purple-600 text-white'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-              }`}
-            >
-              按钮列表模式
-            </button>
+      <div className="space-y-8">
+        {/* 当前语言状态 */}
+        <div className="bg-gradient-to-br from-purple-500 via-purple-600 to-purple-700 rounded-2xl p-8 shadow-xl relative overflow-hidden">
+          {/* 背景装饰 */}
+          <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16"></div>
+          <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/5 rounded-full translate-y-12 -translate-x-12"></div>
+          
+          <div className="relative flex items-center justify-between">
+            <div className="flex items-center space-x-6">
+              <div className="flex items-center justify-center w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl border border-white/30 shadow-lg">
+                <RiGlobalLine size={24} className="text-white" />
+              </div>
+              <div>
+                <h4 className="text-2xl font-bold text-white mb-2">当前语言</h4>
+                <div className="flex items-center space-x-3">
+                  <span className="text-3xl">{selectedLang?.flag}</span>
+                  <div>
+                    <div className="text-xl font-semibold text-white">{selectedLang?.nativeName}</div>
+                    <div className="text-purple-100">{selectedLang?.name}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* 语言选择区域 */}
-        <div className="p-5 rounded-xl border border-gray-100 bg-gray-50/60">
-          <h4 className="mb-5 font-semibold text-gray-900">界面语言</h4>
+        {/* 语言选择器 */}
+        <div className="bg-white rounded-2xl border border-gray-200/60 shadow-sm p-8 hover:shadow-md transition-all duration-200">
+          <div className="flex items-center space-x-3 mb-8">
+            <div className="flex items-center justify-center w-10 h-10 bg-purple-100 rounded-xl">
+              <RiGlobalLine size={20} className="text-purple-600" />
+            </div>
+            <div>
+              <h4 className="text-lg font-semibold text-gray-900">选择语言</h4>
+              <p className="text-sm text-gray-600">点击选择您偏好的界面语言</p>
+            </div>
+          </div>
           
-          {displayMode === 'dropdown' ? (
-            /* 下拉框模式 */
-            <div className="relative">
-              <button
-                onClick={() => setShowDropdown(!showDropdown)}
-                className="flex justify-between items-center px-4 py-3 w-full bg-white rounded-lg border border-gray-200 transition-colors hover:border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500/20"
-              >
-                <div className="flex items-center space-x-3">
-                  <span className="text-xl">{selectedLang?.flag}</span>
-                  <div className="text-left">
-                    <div className="font-medium text-gray-900">{selectedLang?.nativeName}</div>
-                    <div className="text-sm text-gray-600">{selectedLang?.name}</div>
-                  </div>
+          {/* 语言选择下拉框 */}
+          <div className="relative mb-8">
+            <button
+              onClick={() => setShowDropdown(!showDropdown)}
+              className="flex items-center justify-between w-full px-6 py-4 bg-gray-50 rounded-xl border-2 border-gray-200 transition-all duration-200 hover:border-purple-300 hover:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20"
+            >
+              <div className="flex items-center space-x-4">
+                <span className="text-2xl">{selectedLang?.flag}</span>
+                <div className="text-left">
+                  <div className="font-semibold text-gray-900">{selectedLang?.nativeName}</div>
+                  <div className="text-sm text-gray-600">{selectedLang?.name}</div>
                 </div>
-                <RiArrowDownSLine 
-                  size={20} 
-                  className={`text-gray-400 transition-transform duration-200 ${showDropdown ? 'rotate-180' : ''}`} 
-                />
-              </button>
+              </div>
+              <RiArrowDownSLine 
+                size={24} 
+                className={`text-gray-400 transition-transform duration-200 ${showDropdown ? 'rotate-180' : ''}`} 
+              />
+            </button>
 
-              {showDropdown && (
-                <div className="overflow-y-auto absolute z-10 mt-2 w-full max-h-64 bg-white rounded-lg border border-gray-200 shadow-lg">
-                  {languages.map((language) => (
-                    <button
-                      key={language.code}
-                      onClick={() => handleLanguageSelect(language.code)}
-                      className="flex justify-between items-center px-4 py-3 w-full text-left transition-colors hover:bg-purple-50 first:rounded-t-lg last:rounded-b-lg"
-                    >
-                      <div className="flex items-center space-x-3">
-                        <span className="text-xl">{language.flag}</span>
-                        <div>
-                          <div className="font-medium text-gray-900">{language.nativeName}</div>
-                          <div className="text-sm text-gray-600">{language.name}</div>
+            {showDropdown && (
+              <div className="absolute z-10 mt-2 w-full max-h-80 overflow-y-auto bg-white rounded-xl border-2 border-gray-200 shadow-xl animate-in fade-in duration-200">
+                {languages.map((language, index) => (
+                  <button
+                    key={language.code}
+                    onClick={() => handleLanguageSelect(language.code)}
+                    className="flex items-center justify-between w-full px-6 py-4 text-left transition-all duration-200 hover:bg-purple-50 first:rounded-t-xl last:rounded-b-xl group"
+                    style={{
+                      animationDelay: `${index * 50}ms`
+                    }}
+                  >
+                    <div className="flex items-center space-x-4">
+                      <span className="text-2xl transition-transform duration-200 group-hover:scale-110">{language.flag}</span>
+                      <div>
+                        <div className="font-semibold text-gray-900 group-hover:text-purple-700 transition-colors">
+                          {language.nativeName}
+                        </div>
+                        <div className="text-sm text-gray-600 group-hover:text-purple-600 transition-colors">
+                          {language.name}
                         </div>
                       </div>
-                      {selectedLanguage === language.code && (
-                        <RiCheckLine size={18} className="text-purple-600" />
-                      )}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-          ) : (
-            /* 按钮列表模式 */
-            <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-              {languages.map((language) => {
+                    </div>
+                    {selectedLanguage === language.code && (
+                      <div className="flex items-center justify-center w-6 h-6 bg-purple-500 rounded-full">
+                        <RiCheckLine size={14} className="text-white" />
+                      </div>
+                    )}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* 快速语言切换 */}
+          <div>
+            <h5 className="font-semibold text-gray-900 mb-4">快速切换</h5>
+            <div className="grid grid-cols-4 md:grid-cols-8 gap-3">
+              {languages.slice(0, 8).map((language) => {
                 const isSelected = selectedLanguage === language.code
                 return (
                   <button
                     key={language.code}
                     onClick={() => setSelectedLanguage(language.code)}
-                    className={`flex items-center justify-between p-4 rounded-lg border transition-all duration-200 ${
+                    className={`flex flex-col items-center p-4 rounded-xl border-2 transition-all duration-200 transform hover:scale-105 active:scale-95 ${
                       isSelected
                         ? 'bg-purple-50 border-purple-300 ring-2 ring-purple-100'
-                        : 'bg-white border-gray-200 hover:border-purple-200 hover:bg-purple-25'
+                        : 'bg-gray-50 border-gray-200 hover:border-purple-200 hover:bg-purple-25'
                     }`}
                   >
-                    <div className="flex items-center space-x-3">
-                      <span className="text-2xl">{language.flag}</span>
-                      <div className="text-left">
-                        <div className={`font-medium ${isSelected ? 'text-purple-900' : 'text-gray-900'}`}>
-                          {language.nativeName}
-                        </div>
-                        <div className={`text-sm ${isSelected ? 'text-purple-700' : 'text-gray-600'}`}>
-                          {language.name}
-                        </div>
-                      </div>
-                    </div>
-                    {isSelected && (
-                      <div className="flex justify-center items-center w-6 h-6 bg-purple-600 rounded-full">
-                        <RiCheckLine size={14} className="text-white" />
-                      </div>
-                    )}
+                    <span className="text-2xl mb-2">{language.flag}</span>
+                    <span className={`text-xs font-medium text-center ${
+                      isSelected ? 'text-purple-700' : 'text-gray-600'
+                    }`}>
+                      {language.code.split('-')[0].toUpperCase()}
+                    </span>
                   </button>
                 )
               })}
             </div>
-          )}
-        </div>
-
-        {/* 当前选择显示 */}
-        <div className="p-5 bg-gradient-to-r from-purple-50 rounded-xl border to-purple-100/60 border-purple-200/60">
-          <h4 className="mb-3 font-semibold text-purple-900">当前选择</h4>
-          <div className="flex items-center space-x-3">
-            <span className="text-2xl">{selectedLang?.flag}</span>
-            <div>
-              <div className="font-medium text-purple-900">{selectedLang?.nativeName}</div>
-              <div className="text-sm text-purple-700">{selectedLang?.name} ({selectedLang?.code})</div>
-            </div>
           </div>
         </div>
 
-        <div className="flex justify-end pt-4">
-          <button 
-            className="px-6 py-2.5 bg-purple-600 rounded-lg hover:bg-purple-700 transition-colors font-medium"
-            style={{ color: 'white' }}
-          >
+        {/* 保存按钮 */}
+        <div className="flex justify-end">
+          <button className="px-8 py-3 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-xl hover:from-purple-600 hover:to-purple-700 transition-all duration-200 font-medium shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]">
             保存更改
           </button>
         </div>
