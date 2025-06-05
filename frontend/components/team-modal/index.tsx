@@ -2,7 +2,7 @@
 
 // import RadarChart from "@/components/radar-chart"
 import { RiCloseLine } from '@remixicon/react'
-import Button from '@/app/components/base/button'
+import { Button } from '@/components/ui/button'
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { fetchTeamsMemberData } from '@/service/common'
@@ -10,7 +10,6 @@ import RadarChart from '../role-model/radar-chart'
 import cn from '@/utils/classnames'
 import { t } from 'i18next'
 import { useRouter } from 'next/navigation'
-import { useChat } from '../../base/chat/chat/hooks'
 
 export default function TeamModal({
   isOpen,
@@ -174,8 +173,7 @@ export default function TeamModal({
               {/* 关闭按钮 - 移到上面盒子右上角 */}
               <div className="absolute top-4 right-4">
                 <Button
-                  variant="tertiary"
-                  size="large"
+                  variant="ghost"
                   className="rounded-lg bg-[#ffffff]/0 px-2"
                   onClick={onClose}
                 >

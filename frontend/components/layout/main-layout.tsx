@@ -3,6 +3,7 @@
 import { FC, ReactNode } from 'react'
 import MenuList from '../sider'
 import FloatMenu from '../ui/floatButton'
+import { AppProvider } from '@/context/app-context'
 
 
 type MainLayoutProps = {
@@ -12,6 +13,7 @@ type MainLayoutProps = {
 const MainLayout: FC<MainLayoutProps> = ({ children }) => {
 
   return (
+    <AppProvider>
     <div className="flex h-screen bg-gray-50">
       <MenuList  />
       <FloatMenu />
@@ -24,6 +26,7 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
         </div>
       </div>
     </div>
+    </AppProvider>
   )
 }
 

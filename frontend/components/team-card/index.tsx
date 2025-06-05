@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import cn from '@/utils/classnames'
 import type { App } from '@/models/explore'
 import TeamModal from '../team-modal'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 export type AppCardProps = {
   app: App;
   canCreate: boolean;
@@ -11,58 +11,18 @@ export type AppCardProps = {
   isExplore: boolean;
 }
 
-type LevelType = 'junior' | 'middle' | 'senior' | 'expert'
-
 const TeamCard = ({ app }: AppCardProps) => {
   const { t } = useTranslation()
-console.log(app, 'appappappapp')
-
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [teamId, setTeamId] = useState<string>('')
+  const [mounted, setMounted] = useState(false)
 
-  const getLevelType = (): LevelType => {
-    const levelMap: Record<string, LevelType> = {
-      1: 'junior',
-      2: 'middle',
-    }
-    return levelMap[app.level] || 'junior'
-  }
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
-  const getLevelStyle = (type: LevelType) => {
-    const styles = {
-      junior: {
-        bg: 'bg-[#F1F1F1]',
-        text: 'text-[#333333]',
-      },
-      middle: {
-        bg: 'bg-[#F0EBFF]',
-        text: 'text-[#6B47FF]',
-      },
-      senior: {
-        bg: 'bg-[#F0EBFF]',
-        text: 'text-[#6B47FF]',
-      },
-      expert: {
-        bg: 'bg-gradient-to-r from-[#6B48FF] to-[#A18CFF]',
-        text: 'text-white',
-      },
-    }
-    return styles[type]
-  }
-
-  const getLevelText = (type: LevelType) => {
-    const textMap = {
-      junior: t('level.junior', '初级'),
-      middle: t('level.middle', '中级'),
-      senior: t('level.senior', '高级'),
-      expert: t('level.expert', '正高级'),
-    }
-    return textMap[type]
-  }
-
-  const levelType = getLevelType()
-  const levelStyle = getLevelStyle(levelType)
-  const levelText = getLevelText(levelType)
+  // 在挂载前显示静态文本，避免水合错误
+  const teamLabel = mounted ? t('team.label', '团队') : '团队'
 
   return (
     <>
@@ -96,7 +56,7 @@ console.log(app, 'appappappapp')
                   'text-[#6B47FF]',
                 )}
               >
-                {t('team.label', '团队')}
+                {teamLabel}
               </div>
             </div>
 

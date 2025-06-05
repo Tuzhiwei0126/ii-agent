@@ -2,7 +2,7 @@
 
 // import RadarChart from "@/components/radar-chart"
 import { RiCloseLine } from '@remixicon/react'
-import Button from '@/app/components/base/button'
+import { Button } from '@/components/ui/button'
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { fetchRoleData } from '@/service/common'
@@ -108,7 +108,7 @@ export default function RoleModel({
         >
           <div className="relative p-10">
             {/* 标题和关闭按钮 */}
-            <div className="mb-6 flex items-center justify-between">
+            <div className="flex justify-between items-center mb-6">
               <h2 className="flex items-center text-2xl font-bold text-[#6b47ff]">
                 {roleInfo?.name}
                 <span className="ml-4 rounded-full bg-[#f0ebff] px-2 py-1 text-base text-gray-500">
@@ -120,21 +120,20 @@ export default function RoleModel({
                 </span>
               </h2>
               <Button
-                variant="tertiary"
-                size="large"
+                variant="ghost"
                 className="rounded-lg bg-[#ffffff]/0 px-2 "
                 onClick={onClose}
               >
-                <RiCloseLine className="h-8 w-8" />
+                <RiCloseLine className="w-8 h-8" />
               </Button>
             </div>
 
             <div className="flex gap-4">
               {/* 左侧雷达图 */}
               <div className="w-[35%]">
-                <div className="relative mx-auto flex aspect-square w-full items-center justify-center rounded-lg">
+                <div className="flex relative justify-center items-center mx-auto w-full rounded-lg aspect-square">
                   {/* 圆形线条背景 */}
-                  <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="flex absolute inset-0 justify-center items-center">
                     <div className="h-[100%] w-[100%] rounded-full border-2 border-[#d0c2ff] opacity-15"></div>
                     <div className="absolute h-[90%] w-[90%] rounded-full border border-[#c0adff] opacity-30"></div>
                     <div className="absolute h-[70%] w-[70%] rounded-full border border-[#b098ff] opacity-45"></div>
@@ -152,7 +151,7 @@ export default function RoleModel({
 
               {/* 中间人物盒子 */}
               <div className="w-[30%]">
-                <div className="flex h-full flex-col items-center justify-center rounded-lg p-4">
+                <div className="flex flex-col justify-center items-center p-4 h-full rounded-lg">
                   <img src='/role/og_card.png' alt="" className="" />
                   <button className="w-full rounded-full bg-[#6b47ff] px-6 py-2.5 font-medium text-white transition-colors hover:bg-[#452cae]">
                     开始对话
@@ -162,7 +161,7 @@ export default function RoleModel({
 
               {/* 右侧详情 */}
               <div className="w-[35%]">
-                <div className="h-full rounded-lg p-6">
+                <div className="p-6 h-full rounded-lg">
                   <h2 className="mb-3 text-2xl font-bold">
                     {roleInfo?.title}
                   </h2>
@@ -173,7 +172,7 @@ export default function RoleModel({
                     <h3 className="mb-2 font-semibold text-[#6b47ff]">
                       核心能力
                     </h3>
-                    <div className="mb-3 flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-2 mb-3">
                     {roleInfo?.abilities && roleInfo.abilities.map(item => (
                           <div key={item.id} className="rounded-full bg-[#f0ebff] px-3 py-1 text-[#6b47ff]">{item.name}</div>
                         ))}

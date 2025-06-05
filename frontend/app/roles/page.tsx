@@ -1,12 +1,22 @@
-import MainLayout from '@/components/layout/main-layout'
+"use client";
 
-export default function RolesPage() {
+import React from "react";
+import MainLayout from "@/components/layout/main-layout";
+import List from "@/app/roles/list";
+
+
+const RolesPage=() => {
   return (
     <MainLayout>
-      <div className="h-full">
-        {/* 这里放置角色库页面的具体内容 */}
-        <h1 className="text-2xl font-bold">角色库</h1>
+      <div className="flex flex-col h-full">
+        {/* 页面标题 */}
+        <div className="mb-4 text-2xl font-bold text-gray-900">角色库</div>
+        {/* 角色列表内容 */}
+
+        <List />
       </div>
     </MainLayout>
-  )
-} 
+  );
+};
+
+export default RolesPage;

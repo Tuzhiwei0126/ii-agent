@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "../styles/globals.css";
+import "@/lib/i18n";
 import Providers from "@/providers";
 import { AntdRegistry } from '@ant-design/nextjs-registry';
 import { AuthGuard } from '@/components/auth-guard';
