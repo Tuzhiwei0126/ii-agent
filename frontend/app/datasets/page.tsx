@@ -76,7 +76,7 @@ export default function DatasetsPage() {
             {/* 进度条 */}
             <div className="overflow-hidden w-32 h-2 bg-gray-200 rounded-full">
               <div 
-                className="h-full bg-purple-500 transition-all duration-300"
+                className="h-full bg-[#6B48FF] transition-all duration-300"
                 style={{ width: `${storagePercentage}%` }}
               />
             </div>
@@ -95,7 +95,7 @@ export default function DatasetsPage() {
           {/* 新建文件夹按钮 */}
           <Button 
             onClick={handleCreateFolder}
-            className="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-md flex items-center gap-2"
+            className="bg-[#6B48FF] hover:bg-purple-600 text-white px-4 py-2 rounded-md flex items-center gap-2"
           >
             <FolderPlus className="w-4 h-4" />
             新建文件夹

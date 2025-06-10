@@ -110,11 +110,11 @@ const ChatMessage = ({
                         key={`${message.id}-file-${fileIndex}`}
                         className="inline-block ml-auto rounded-3xl overflow-hidden max-w-[320px]"
                       >
-                        <div className="w-40 h-40 rounded-xl overflow-hidden">
+                        <div className="overflow-hidden w-40 h-40 rounded-xl">
                           <img
                             src={message.fileContents[fileName]}
                             alt={fileName}
-                            className="w-full h-full object-cover"
+                            className="object-cover w-full h-full"
                           />
                         </div>
                       </div>
@@ -128,19 +128,19 @@ const ChatMessage = ({
                   return (
                     <div
                       key={`${message.id}-file-${fileIndex}`}
-                      className="inline-block ml-auto bg-[#35363a] text-white rounded-2xl px-4 py-3 border border-gray-700 shadow-sm"
+                      className="inline-block ml-auto bg-[#35363a] text-[#888888] rounded-2xl px-4 py-3 border border-gray-700 shadow-sm"
                     >
-                      <div className="flex items-center gap-3">
+                      <div className="flex gap-3 items-center">
                         <div
-                          className={`flex items-center justify-center w-12 h-12 ${bgColor} rounded-xl`}
+                          className={`flex justify-center items-center w-12 h-12 rounded-xl ${bgColor}`}
                         >
-                          <IconComponent className="size-6 text-white" />
+                          <IconComponent className="size-6 text-[#666666]" />
                         </div>
                         <div className="flex flex-col">
-                          <span className="text-base font-medium">
+                          <span className="text-base font-medium text-[#444444]">
                             {fileName}
                           </span>
-                          <span className="text-left text-sm text-gray-500">
+                          <span className="text-left text-sm text-[#999999]">
                             {label}
                           </span>
                         </div>
@@ -155,8 +155,8 @@ const ChatMessage = ({
               <motion.div
                 className={`inline-block text-left rounded-lg ${
                   message.role === "user"
-                    ? "bg-[#35363a] p-3 max-w-[80%] text-white border border-[#3A3B3F] shadow-sm whitespace-pre-wrap"
-                    : "text-white"
+                    ? "bg-[#D8D7FF] p-3 max-w-[80%] font-medium font-weight-400 text-sm border-none text-[#444444] border  shadow-sm whitespace-pre-wrap"
+                    : "text-[#333333]"
                 } ${
                   editingMessage?.id === message.id ? "w-full max-w-none" : ""
                 }`}
@@ -190,7 +190,7 @@ const ChatMessage = ({
                                   setEditingMessage(message);
                                 }}
                               >
-                                <Pencil className="size-3 mr-1" />
+                                <Pencil className="mr-1 size-3" />
                               </Button>
                             </div>
                           )}
@@ -233,7 +233,7 @@ const ChatMessage = ({
             }}
           >
             <motion.div
-              className="inline-block p-3 text-left rounded-lg bg-neutral-800/90 text-white backdrop-blur-sm"
+              className="inline-block p-3 text-left rounded-lg bg-neutral-800/90 text-[#777777] backdrop-blur-sm"
               initial={{ scale: 0.95 }}
               animate={{ scale: 1 }}
               transition={{
@@ -242,7 +242,7 @@ const ChatMessage = ({
                 damping: 25,
               }}
             >
-              <div className="flex items-center gap-3">
+              <div className="flex gap-3 items-center">
                 <div className="flex space-x-2">
                   <div className="w-2 h-2 bg-white rounded-full animate-[dot-bounce_1.2s_ease-in-out_infinite_0ms]" />
                   <div className="w-2 h-2 bg-white rounded-full animate-[dot-bounce_1.2s_ease-in-out_infinite_200ms]" />
@@ -254,14 +254,14 @@ const ChatMessage = ({
         )}
 
         {isCompleted && (
-          <div className="flex gap-x-2 items-center bg-[#25BA3B1E] text-green-600 text-sm p-2 rounded-full">
+          <div className="flex gap-x-2 items-center bg-[#25BA3B1E] text-[#444444] text-sm p-2 rounded-full">
             <Check className="size-4" />
             <span>GoAgent has completed the current task.</span>
           </div>
         )}
 
         {isStopped && (
-          <div className="flex gap-x-2 items-center bg-[#ffbf361f] text-yellow-300 text-sm p-2 rounded-full">
+          <div className="flex gap-x-2 items-center bg-[#ffbf361f] text-[#555555] text-sm p-2 rounded-full">
             <CircleStop className="size-4" />
             <span>GoAgent has stopped, send a new message to continue.</span>
           </div>

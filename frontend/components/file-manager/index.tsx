@@ -371,7 +371,7 @@ const FileManager: React.FC<FileManagerProps> = ({
                   className="hidden"
                   accept="*/*"
                 />
-                <div className="flex gap-3 items-center px-5 py-3 text-sm font-medium text-white bg-purple-500 rounded-lg transition-colors hover:bg-purple-600">
+                <div className="flex gap-3 items-center px-5 py-3 text-sm font-medium text-white bg-[#6B48FF] rounded-lg transition-colors hover:bg-purple-600">
                   <Upload className="w-5 h-5" />
                   本地文件
                 </div>

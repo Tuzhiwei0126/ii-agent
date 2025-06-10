@@ -266,21 +266,21 @@ const Action = ({ workspaceInfo, type, value, onClick }: ActionProps) => {
   return (
     <div
       onClick={onClick}
-      className={`group cursor-pointer flex items-start gap-2 px-3 py-2 bg-[#35363a] rounded-xl backdrop-blur-sm 
+      className={`group cursor-pointer flex items-start gap-2 px-3 py-2 bg-purple-50 rounded-xl backdrop-blur-sm 
       shadow-sm
       transition-all duration-200 ease-out
-      hover:bg-neutral-800
-      hover:border-neutral-700
-      hover:shadow-[0_2px_8px_rgba(0,0,0,0.24)]
+      hover:bg-purple-100
+      hover:border-purple-200
+      hover:shadow-[0_2px_8px_rgba(147,51,234,0.15)]
       active:scale-[0.98] overflow-hidden
       ${hasAnimated.current ? "animate-none" : "animate-fadeIn"}`}
     >
       {step_icon}
       <div className="flex flex-col gap-1.5 text-sm">
-        <span className="text-neutral-100 font-medium group-hover:text-white">
+        <span className="font-medium text-slate-600 group-hover:text-slate-700">
           {step_title}
         </span>
-        <span className="text-neutral-400 font-medium truncate group-hover:text-neutral-300">
+        <span className="font-medium truncate text-slate-500 group-hover:text-slate-600">
           {step_value}
         </span>
       </div>

@@ -3,13 +3,13 @@
 import { Terminal as XTerm } from "@xterm/xterm";
 import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 import {
-  Code,
-  Globe,
-  Terminal as TerminalIcon,
-  X,
-  Loader2,
-  Share,
-} from "lucide-react";
+  RiGlobalLine,
+  RiCodeLine,
+  RiTerminalLine,
+  RiCloseLine,
+  RiLoader4Line,
+  RiShareLine,
+} from "@remixicon/react";
 import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
@@ -863,236 +863,228 @@ export default function Home() {
   }, [messages?.length]);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-[#1a1625]">
-      <SidebarButton />
-      {!isInChatView && (
-        <Image
-          src="/logo-only.png"
-          alt="GoAgent Logo"
-          width={80}
-          height={80}
-          className="rounded-sm drop-shadow-[0_0_15px_rgba(147,51,234,0.3)]"
-        />
-      )}
-      <div
-        className={`flex justify-between w-full ${
-          !isInChatView ? "pt-0 pb-8" : "p-4"
-        }`}
-      >
-        {!isInChatView && <div />}
-        <motion.h1
-          className={`font-semibold text-center bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent
-            ${isInChatView ? "flex gap-x-2 items-center text-2xl" : "text-4xl"}
-            ${orbitron.className}`}
-          layout
-          layoutId="page-title"
+    <div className="flex h-[calc(100%-2rem)] overflow-hidden">
+      <SidebarButton className="flex-shrink-0" />
+      <div className="flex flex-col flex-1 min-h-0">
+        <div
+          className={`flex justify-end items-center flex-shrink-0 ${
+            !isInChatView ? "pt-0 pb-8" : "p-2"
+          }`}
         >
-          {isInChatView && (
-            <Image
-              src="/logo-only.png"
-              alt="GoAgent Logo"
-              width={40}
-              height={40}
-              className="rounded-sm"
-            />
+          {!isInChatView && <div />}
+          {isInChatView ? (
+            <div className="flex gap-x-2">
+              <Button
+                className="flex gap-2 items-center px-3 h-8 text-gray-300 transition-all duration-200 cursor-pointer bg-white/5 hover:bg-white/10 border-purple-500/20 hover:text-white"
+                variant="outline"
+                onClick={handleShare}
+              >
+                <RiShareLine className="size-4" />
+                <span className="text-sm">分享</span>
+              </Button>
+              <Button 
+                className="flex justify-center items-center p-0 w-8 h-8 text-gray-300 transition-all duration-200 cursor-pointer bg-white/5 hover:bg-white/10 border-purple-500/20 hover:text-white"
+                variant="outline"
+                onClick={resetChat}
+              >
+                <RiCloseLine className="size-4" />
+              </Button>
+            </div>
+          ) : (
+            <div />
           )}
-          {`GoAgent`}
-        </motion.h1>
-        {isInChatView ? (
-          <div className="flex gap-x-2">
-            <Button
-              className="h-10 cursor-pointer"
-              variant="outline"
-              onClick={handleShare}
-            >
-              <Share /> Share
-            </Button>
-            <Button className="cursor-pointer" onClick={resetChat}>
-              <X className="size-5" />
-            </Button>
+        </div>
+
+        {isLoadingSession ? (
+          <div className="flex flex-col justify-center items-center p-8">
+            <RiLoader4Line className="mb-4 w-8 h-8 text-white animate-spin" />
+            <p className="text-lg text-white">Loading session history...</p>
           </div>
         ) : (
-          <div />
-        )}
-      </div>
-      {isLoadingSession ? (
-        <div className="flex flex-col justify-center items-center p-8">
-          <Loader2 className="mb-4 w-8 h-8 text-white animate-spin" />
-          <p className="text-lg text-white">Loading session history...</p>
-        </div>
-      ) : (
-        <LayoutGroup>
-          <AnimatePresence mode="wait">
-            {!isInChatView ? (
-              <QuestionInput
-                placeholder="Give GoAgent a task to work on..."
-                value={currentQuestion}
-                setValue={setCurrentQuestion}
-                handleKeyDown={handleKeyDown}
-                handleSubmit={handleQuestionSubmit}
-                handleFileUpload={handleFileUpload}
-                isUploading={isUploading}
-                isUseDeepResearch={isUseDeepResearch}
-                setIsUseDeepResearch={setIsUseDeepResearch}
-                isDisabled={!socket || socket.readyState !== WebSocket.OPEN}
-                isGeneratingPrompt={isGeneratingPrompt}
-                handleEnhancePrompt={handleEnhancePrompt}
-              />
-            ) : (
-              <motion.div
-                key="chat-view"
-                initial={{ opacity: 0, y: 30, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -20, scale: 0.95 }}
-                transition={{
-                  type: "spring",
-                  stiffness: 300,
-                  damping: 30,
-                  mass: 1,
-                }}
-                className="grid overflow-hidden flex-1 grid-cols-10 pr-4 pb-4 w-full write-report"
-              >
-                <ChatMessage
-                  messages={messages}
-                  isLoading={isLoading}
-                  isCompleted={isCompleted}
-                  isStopped={isStopped}
-                  workspaceInfo={workspaceInfo}
-                  handleClickAction={handleClickAction}
-                  isUploading={isUploading}
-                  isUseDeepResearch={isUseDeepResearch}
-                  isReplayMode={isReplayMode}
-                  currentQuestion={currentQuestion}
-                  messagesEndRef={messagesEndRef}
-                  setCurrentQuestion={setCurrentQuestion}
-                  handleKeyDown={handleKeyDown}
-                  handleQuestionSubmit={handleQuestionSubmit}
-                  handleFileUpload={handleFileUpload}
-                  isGeneratingPrompt={isGeneratingPrompt}
-                  handleEnhancePrompt={handleEnhancePrompt}
-                  handleCancel={handleCancelQuery}
-                  editingMessage={editingMessage}
-                  setEditingMessage={setEditingMessage}
-                  handleEditMessage={handleEditMessage}
-                />
-
-                <div className="col-span-6 bg-[#231c2d] border border-purple-900/30 p-4 rounded-2xl">
-                  <div className="flex justify-between items-center pb-4 bg-neutral-850">
-                    <div className="flex gap-x-4">
-                      <Button
-                        className={`cursor-pointer hover:!bg-purple-900/20 ${
-                          activeTab === TAB.BROWSER
-                            ? "bg-gradient-to-r from-purple-500 to-purple-700 !text-white"
-                            : ""
-                        }`}
-                        variant="outline"
-                        onClick={() => setActiveTab(TAB.BROWSER)}
-                      >
-                        <Globe className="size-4" /> Browser
-                      </Button>
-                      <Button
-                        className={`cursor-pointer hover:!bg-purple-900/20 ${
-                          activeTab === TAB.CODE
-                            ? "bg-gradient-to-r from-purple-500 to-purple-700 !text-white"
-                            : ""
-                        }`}
-                        variant="outline"
-                        onClick={() => setActiveTab(TAB.CODE)}
-                      >
-                        <Code className="size-4" /> Code
-                      </Button>
-                      <Button
-                        className={`cursor-pointer hover:!bg-purple-900/20 ${
-                          activeTab === TAB.TERMINAL
-                            ? "bg-gradient-to-r from-purple-500 to-purple-700 !text-white"
-                            : ""
-                        }`}
-                        variant="outline"
-                        onClick={() => setActiveTab(TAB.TERMINAL)}
-                      >
-                        <TerminalIcon className="size-4" /> Terminal
-                      </Button>
-                    </div>
-                    <Button
-                      className="cursor-pointer border-purple-500/30 hover:border-purple-500"
-                      variant="outline"
-                      onClick={handleOpenVSCode}
-                    >
-                      <Image
-                        src={"/vscode.png"}
-                        alt="VS Code"
-                        width={20}
-                        height={20}
-                      />{" "}
-                      Open with VS Code
-                    </Button>
-                  </div>
-                  <Browser
-                    className={
-                      activeTab === TAB.BROWSER &&
-                      (currentActionData?.type === TOOL.VISIT || isBrowserTool)
-                        ? ""
-                        : "hidden"
-                    }
-                    url={currentActionData?.data?.tool_input?.url || browserUrl}
-                    screenshot={
-                      isBrowserTool
-                        ? (currentActionData?.data.result as string)
-                        : undefined
-                    }
-                    raw={
-                      currentActionData?.type === TOOL.VISIT
-                        ? (currentActionData?.data?.result as string)
-                        : undefined
-                    }
-                  />
-                  <SearchBrowser
-                    className={
-                      activeTab === TAB.BROWSER &&
-                      currentActionData?.type === TOOL.WEB_SEARCH
-                        ? ""
-                        : "hidden"
-                    }
-                    keyword={currentActionData?.data.tool_input?.query}
-                    search_results={
-                      currentActionData?.type === TOOL.WEB_SEARCH &&
-                      currentActionData?.data?.result
-                        ? parseJson(currentActionData?.data?.result as string)
-                        : undefined
-                    }
-                  />
-                  <ImageBrowser
-                    className={
-                      activeTab === TAB.BROWSER &&
-                      currentActionData?.type === TOOL.IMAGE_GENERATE
-                        ? ""
-                        : "hidden"
-                    }
-                    url={currentActionData?.data.tool_input?.output_filename}
-                    image={getRemoteURL(
-                      currentActionData?.data.tool_input?.output_filename
-                    )}
-                  />
-                  <CodeEditor
-                    currentActionData={currentActionData}
-                    activeTab={activeTab}
-                    className={activeTab === TAB.CODE ? "" : "hidden"}
-                    workspaceInfo={workspaceInfo}
-                    activeFile={activeFileCodeEditor}
-                    setActiveFile={setActiveFileCodeEditor}
-                    filesContent={filesContent}
-                    isReplayMode={isReplayMode}
-                  />
-                  <Terminal
-                    ref={xtermRef}
-                    className={activeTab === TAB.TERMINAL ? "" : "hidden"}
+          <LayoutGroup>
+            <AnimatePresence mode="wait">
+              {!isInChatView ? (
+                <div className="flex flex-1 justify-center items-end mb-4">
+                  <QuestionInput
+                    placeholder="Give GoAgent a task to work on..."
+                    value={currentQuestion}
+                    setValue={setCurrentQuestion}
+                    handleKeyDown={handleKeyDown}
+                    handleSubmit={handleQuestionSubmit}
+                    handleFileUpload={handleFileUpload}
+                    isUploading={isUploading}
+                    isUseDeepResearch={isUseDeepResearch}
+                    setIsUseDeepResearch={setIsUseDeepResearch}
+                    isDisabled={!socket || socket.readyState !== WebSocket.OPEN}
+                    isGeneratingPrompt={isGeneratingPrompt}
+                    handleEnhancePrompt={handleEnhancePrompt}
                   />
                 </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </LayoutGroup>
-      )}
+              ) : (
+                <motion.div
+                  key="chat-view"
+                  initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 300,
+                    damping: 30,
+                    mass: 1,
+                  }}
+                  className="grid flex-1 grid-cols-9 pr-4 pb-4 w-full min-h-0 write-report"
+                >
+                  <div className="overflow-y-auto col-span-4 pr-2 min-h-0">
+                    <div className="h-full">
+                      <ChatMessage
+                        messages={messages}
+                        isLoading={isLoading}
+                        isCompleted={isCompleted}
+                        isStopped={isStopped}
+                        workspaceInfo={workspaceInfo}
+                        handleClickAction={handleClickAction}
+                        isUploading={isUploading}
+                        isUseDeepResearch={isUseDeepResearch}
+                        isReplayMode={isReplayMode}
+                        currentQuestion={currentQuestion}
+                        messagesEndRef={messagesEndRef}
+                        setCurrentQuestion={setCurrentQuestion}
+                        handleKeyDown={handleKeyDown}
+                        handleQuestionSubmit={handleQuestionSubmit}
+                        handleFileUpload={handleFileUpload}
+                        isGeneratingPrompt={isGeneratingPrompt}
+                        handleEnhancePrompt={handleEnhancePrompt}
+                        handleCancel={handleCancelQuery}
+                        editingMessage={editingMessage}
+                        setEditingMessage={setEditingMessage}
+                        handleEditMessage={handleEditMessage}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col col-span-5 p-4 min-h-0 bg-[#F9F8FF] rounded-2xl border shadow-lg border-purple-500/20">
+                    <div className="flex flex-shrink-0 justify-between items-center pb-4 bg-[#F9F8FF]">
+                      <div className="flex gap-x-4">
+                        <Button
+                          className={`cursor-pointer hover:!bg-purple-500/20 transition-all duration-200 ${
+                            activeTab === TAB.BROWSER
+                              ? "bg-gradient-to-r from-purple-600 to-purple-800 !text-white shadow-md"
+                              : "border-purple-500/30 text-gray-300"
+                          }`}
+                          variant="outline"
+                          onClick={() => setActiveTab(TAB.BROWSER)}
+                        >
+                          <RiGlobalLine className="mr-2 size-4" /> Browser
+                        </Button>
+                        <Button
+                          className={`cursor-pointer hover:!bg-purple-500/20 transition-all duration-200 ${
+                            activeTab === TAB.CODE
+                              ? "bg-gradient-to-r from-purple-600 to-purple-800 !text-white shadow-md"
+                              : "border-purple-500/30 text-gray-300"
+                          }`}
+                          variant="outline"
+                          onClick={() => setActiveTab(TAB.CODE)}
+                        >
+                          <RiCodeLine className="mr-2 size-4" /> Code
+                        </Button>
+                        <Button
+                          className={`cursor-pointer hover:!bg-purple-500/20 transition-all duration-200 ${
+                            activeTab === TAB.TERMINAL
+                              ? "bg-gradient-to-r from-purple-600 to-purple-800 !text-white shadow-md"
+                              : "border-purple-500/30 text-gray-300"
+                          }`}
+                          variant="outline"
+                          onClick={() => setActiveTab(TAB.TERMINAL)}
+                        >
+                          <RiTerminalLine className="mr-2 size-4" /> Terminal
+                        </Button>
+                      </div>
+                      {/* <Button
+                        className="text-gray-300 transition-all duration-200 cursor-pointer border-purple-500/30 hover:border-purple-500 hover:bg-purple-500/10"
+                        variant="outline"
+                        onClick={handleOpenVSCode}
+                      >
+                        <Image
+                          src={"/vscode.png"}
+                          alt="VS Code"
+                          width={20}
+                          height={20}
+                          className="mr-2"
+                        />
+                        Open with VS Code
+                      </Button> */}
+                    </div>
+                    <div className="overflow-y-auto flex-1 min-h-0 bg-[#F9F8FF] rounded-lg">
+                      <div className="h-full">
+                        <Browser
+                          className={
+                            activeTab === TAB.BROWSER &&
+                            (currentActionData?.type === TOOL.VISIT || isBrowserTool)
+                              ? ""
+                              : "hidden"
+                          }
+                          url={currentActionData?.data?.tool_input?.url || browserUrl}
+                          screenshot={
+                            isBrowserTool
+                              ? (currentActionData?.data.result as string)
+                              : undefined
+                          }
+                          raw={
+                            currentActionData?.type === TOOL.VISIT
+                              ? (currentActionData?.data?.result as string)
+                              : undefined
+                          }
+                        />
+                        <SearchBrowser
+                          className={
+                            activeTab === TAB.BROWSER &&
+                            currentActionData?.type === TOOL.WEB_SEARCH
+                              ? ""
+                              : "hidden"
+                          }
+                          keyword={currentActionData?.data.tool_input?.query}
+                          search_results={
+                            currentActionData?.type === TOOL.WEB_SEARCH &&
+                            currentActionData?.data?.result
+                              ? parseJson(currentActionData?.data?.result as string)
+                              : undefined
+                          }
+                        />
+                        <ImageBrowser
+                          className={
+                            activeTab === TAB.BROWSER &&
+                            currentActionData?.type === TOOL.IMAGE_GENERATE
+                              ? ""
+                              : "hidden"
+                          }
+                          url={currentActionData?.data.tool_input?.output_filename}
+                          image={getRemoteURL(
+                            currentActionData?.data.tool_input?.output_filename
+                          )}
+                        />
+                        <CodeEditor
+                          currentActionData={currentActionData}
+                          activeTab={activeTab}
+                          className={activeTab === TAB.CODE ? "" : "hidden"}
+                          workspaceInfo={workspaceInfo}
+                          activeFile={activeFileCodeEditor}
+                          setActiveFile={setActiveFileCodeEditor}
+                          filesContent={filesContent}
+                          isReplayMode={isReplayMode}
+                        />
+                        <Terminal
+                          ref={xtermRef}
+                          className={activeTab === TAB.TERMINAL ? "" : "hidden"}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </LayoutGroup>
+        )}
+      </div>
     </div>
   );
 }

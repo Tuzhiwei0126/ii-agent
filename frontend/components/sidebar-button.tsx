@@ -32,7 +32,6 @@ const SidebarButton = ({ className, workspaceInfo }: SidebarButtonProps) => {
   const searchParams = useSearchParams();
   const deviceId = Cookies.get("device_id") || "";
 
-  // Get the current session ID from URL parameters
   useEffect(() => {
     const id = searchParams.get("id");
     if (id) {
@@ -70,11 +69,9 @@ const SidebarButton = ({ className, workspaceInfo }: SidebarButtonProps) => {
   }, [deviceId]);
 
   const handleSessionClick = (sessionId: string) => {
-    // Redirect to the session or load it in the current view
     window.location.href = `/?id=${sessionId}`;
   };
 
-  // Format the date to a more readable format
   const formatDate = (dateString: string) => {
     try {
       return dayjs(dateString).format("MMM D, YYYY h:mm A");
@@ -88,102 +85,93 @@ const SidebarButton = ({ className, workspaceInfo }: SidebarButtonProps) => {
   }, [fetchSessions]);
 
   return (
-    <>
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={toggleSidebar}
-        className={cn(
-          "fixed top-4 left-4 z-50 bg-[#1e1f23] border border-[#3A3B3F] hover:bg-[#2a2b30] p-2",
-          className
-        )}
-      >
-        <PanelLeft className="h-5 w-5 text-white" />
-      </Button>
-
+    <div className={cn("flex h-full border-r border-gray-200", className)}>
+      {/* 侧边栏内容 */}
       <AnimatePresence>
         {isOpen && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 0.5 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black z-60 cursor-pointer"
-              onClick={toggleSidebar}
-            />
-
-            <motion.div
-              initial={{ x: "-100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "-100%" }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="fixed left-0 top-0 h-full w-[300px] bg-[#1e1f23] border-r border-[#3A3B3F] z-100 overflow-auto"
-            >
-              <div className="p-4 border-b border-[#3A3B3F] flex items-center gap-3">
-                <div
-                  className="cursor-pointer flex items-center justify-center w-8 h-8 bg-[#2a2b30] rounded-md"
-                  onClick={toggleSidebar}
+          <motion.div
+            initial={{ width: 0 }}
+            animate={{ width: "200px" }}
+            exit={{ width: 0 }}
+            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            className="overflow-hidden h-full bg-white"
+          >
+            <div className="flex gap-3 items-center p-4 bg-white border-b border-purple-100">
+              <div
+                className="flex justify-center items-center w-8 h-8 bg-purple-50 rounded-md cursor-pointer hover:bg-purple-100"
+                onClick={toggleSidebar}
+              >
+                <PanelLeft className="w-5 h-5 text-purple-600" />
+              </div>
+              <div className="flex gap-2 items-center">
+                <Image
+                  src="/logo-only.png"
+                  alt="Logo"
+                  width={24}
+                  height={24}
+                  className="rounded-sm"
+                />
+                <span
+                  className={`text-purple-700 text-lg font-serif ${orbitron.className}`}
                 >
-                  <PanelLeft className="h-5 w-5 text-white" />
-                </div>
-                <div className="flex items-center gap-2">
-                  <Image
-                    src="/logo-only.png"
-                    alt="Logo"
-                    width={24}
-                    height={24}
-                    className="rounded-sm"
-                  />
-                  <span
-                    className={`text-white text-lg font-serif ${orbitron.className}`}
-                  >
-                    GoAgent
-                  </span>
-                </div>
+                  GoAgent
+                </span>
               </div>
+            </div>
 
-              <div className="p-2">
-                {isLoading ? (
-                  <div className="flex justify-center py-4">
-                    <Loader2 className="h-6 w-6 text-white animate-spin" />
-                  </div>
-                ) : error ? (
-                  <div className="text-red-400 text-sm p-2">{error}</div>
-                ) : sessions.length === 0 ? (
-                  <div className="text-gray-400 text-sm p-2">
-                    No sessions found
-                  </div>
-                ) : (
-                  <div className="space-y-2">
-                    {sessions.map((session) => (
-                      <div
-                        key={session.id}
-                        onClick={() => handleSessionClick(session.id)}
-                        className={cn(
-                          "p-2 rounded-md cursor-pointer hover:bg-[#2a2b30] transition-colors",
-                          activeSessionId === session.id ||
-                            workspaceInfo?.includes(session.id)
-                            ? "bg-[#2a2b30] border border-[#3A3B3F]"
-                            : ""
-                        )}
-                      >
-                        <div className="text-white text-sm font-medium truncate">
-                          {session.first_message}
-                        </div>
-                        <div className="text-gray-400 text-xs flex items-center gap-1 mt-1">
-                          <Clock className="h-3 w-3" />
-                          {formatDate(session.created_at)}
-                        </div>
+            <div className="overflow-y-auto p-2 h-full">
+              {isLoading ? (
+                <div className="flex justify-center py-4">
+                  <Loader2 className="w-6 h-6 text-purple-600 animate-spin" />
+                </div>
+              ) : error ? (
+                <div className="p-2 text-sm text-red-400">{error}</div>
+              ) : sessions.length === 0 ? (
+                <div className="p-2 text-sm text-gray-500">
+                  暂无会话
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  {sessions.map((session) => (
+                    <div
+                      key={session.id}
+                      onClick={() => handleSessionClick(session.id)}
+                      className={cn(
+                        "p-2 rounded-md cursor-pointer hover:bg-purple-50 transition-colors",
+                        activeSessionId === session.id ||
+                          workspaceInfo?.includes(session.id)
+                          ? "bg-purple-50 border border-purple-200"
+                          : ""
+                      )}
+                    >
+                      <div className="text-sm font-medium text-gray-800 truncate">
+                        {session.first_message}
                       </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </motion.div>
-          </>
+                      <div className="flex gap-1 items-center mt-1 text-xs text-gray-500">
+                        <Clock className="w-3 h-3" />
+                        {formatDate(session.created_at)}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </motion.div>
         )}
       </AnimatePresence>
-    </>
+
+      {/* 侧边栏按钮 */}
+      <div className="flex items-center">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={toggleSidebar}
+          className="h-8 w-8 p-1.5 hover:bg-purple-50"
+        >
+          <PanelLeft className="w-5 h-5 text-purple-600" />
+        </Button>
+      </div>
+    </div>
   );
 };
 

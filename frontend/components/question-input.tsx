@@ -1,11 +1,12 @@
 import { motion } from "framer-motion";
-import { ArrowUp, Loader2, Paperclip } from "lucide-react";
+import { RiArrowUpLine, RiLoader2Line, RiAttachmentLine } from "@remixicon/react";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
 import { useState, useEffect } from "react";
 import { getFileIconAndColor } from "@/utils/file-utils";
 import Image from "next/image";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
+import { cn } from "@/lib/utils";
 
 interface FileUploadStatus {
   name: string;
@@ -124,36 +125,33 @@ const QuestionInput = ({
         damping: 30,
         mass: 1,
       }}
-      className={`w-full max-w-2xl z-50 ${className}`}
+      className={cn("z-50 w-full max-w-2xl", className)}
     >
       <motion.div
-        className="relative rounded-xl"
+        className={cn(
+          "relative rounded-2xl border border-[#6B48FF80] bg-white shadow-[0_0_10px_rgba(107,72,255,0.5)]",
+          isDisabled && "opacity-50 pointer-events-none"
+        )}
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.1 }}
       >
         {files.length > 0 && (
-          <div className="absolute top-4 left-4 right-2 flex items-center overflow-auto gap-2 z-10">
+          <div className="flex overflow-auto absolute right-2 top-4 left-4 z-10 gap-2 items-center">
             {files.map((file) => {
               if (file.isImage && file.preview) {
                 return (
                   <div key={file.name} className="relative">
-                    <div className="w-20 h-20 rounded-xl overflow-hidden">
+                    <div className="overflow-hidden w-20 h-20 rounded-xl">
                       <img
                         src={file.preview}
                         alt={file.name}
-                        className="w-full h-full object-cover"
+                        className="object-cover w-full h-full"
                       />
                     </div>
-                    {/* <button
-                      onClick={() => removeFile(file.name)}
-                      className="absolute -top-2 -right-2 bg-black rounded-full p-1 hover:bg-gray-700"
-                    >
-                      <X className="size-4 text-white" />
-                    </button> */}
                     {file.loading && (
-                      <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-xl">
-                        <Loader2 className="size-5 text-white animate-spin" />
+                      <div className="flex absolute inset-0 justify-center items-center rounded-xl bg-black/30">
+                        <RiLoader2Line className="text-white animate-spin size-5" />
                       </div>
                     )}
                   </div>
@@ -167,63 +165,56 @@ const QuestionInput = ({
               return (
                 <div
                   key={file.name}
-                  className="flex items-center gap-2 bg-neutral-900 text-white rounded-full px-3 py-2 border border-gray-700 shadow-sm"
+                  className="flex items-center gap-2 bg-white text-[#6B48FF] rounded-full px-3 py-2 border border-[#6B48FF40] shadow-sm"
                 >
                   <div
-                    className={`flex items-center justify-center w-10 h-10 ${bgColor} rounded-full`}
+                    className={`flex justify-center items-center w-10 h-10 rounded-full ${bgColor}`}
                   >
                     {isUploading ? (
-                      <Loader2 className="size-5 text-white animate-spin" />
+                      <RiLoader2Line className="text-white animate-spin size-5" />
                     ) : (
-                      <IconComponent className="size-5 text-white" />
+                      <IconComponent className="text-white size-5" />
                     )}
                   </div>
                   <div className="flex flex-col">
-                    <span className="text-sm font-medium truncate max-w-[200px]">
+                    <span className="text-sm font-medium truncate max-w-[200px] text-black">
                       {file.name}
                     </span>
-                    <span className="text-xs text-gray-500">{label}</span>
+                    <span className="text-xs text-[#6B48FF80]">{label}</span>
                   </div>
-                  {/* <button
-                    onClick={() => removeFile(file.name)}
-                    className="ml-2 rounded-full p-1 hover:bg-gray-700"
-                  >
-                    <X className="size-4" />
-                  </button> */}
                 </div>
               );
             })}
           </div>
         )}
         <Textarea
-          className={`w-full p-4 pb-[72px] rounded-xl !text-lg focus:ring-0 resize-none !placeholder-gray-400 !bg-[#35363a] border-[#ffffff0f] shadow-[0px_0px_10px_0px_rgba(0,0,0,0.02)] ${
-            files.length > 0 ? "pt-24 h-60" : "h-50"
-          } ${textareaClassName}`}
-          placeholder={
-            placeholder ||
-            "Enter your research query or complex question for in-depth analysis..."
-          }
+          className={cn(
+            "w-full p-4 pb-[72px] rounded-2xl text-lg focus:ring-0 resize-none",
+            "placeholder-gray-400 bg-white text-black border-none",
+            "focus:shadow-[0_0_0_2px_rgba(107,72,255,0.3)]",
+            files.length > 0 ? "pt-24 h-60" : "h-50",
+            textareaClassName
+          )}
+          placeholder={placeholder || "输入您的问题..."}
           value={value}
           onChange={(e) => setValue(e.target.value)}
           onKeyDown={handleKeyDown}
         />
-        <div className="flex justify-between items-center absolute bottom-0 py-4 m-px w-[calc(100%-4px)] rounded-b-xl bg-[#35363a]  px-4">
-          <div className="flex items-center gap-x-3">
+        <div className="flex absolute bottom-0 justify-between items-center px-4 py-4 w-full bg-white rounded-b-2xl">
+          <div className="flex gap-x-3 items-center">
             {handleFileUpload && (
               <label htmlFor="file-upload" className="cursor-pointer">
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="hover:bg-gray-700/50 size-10 rounded-full cursor-pointer border border-[#ffffff0f] shadow-sm"
-                  onClick={() =>
-                    document.getElementById("file-upload")?.click()
-                  }
+                  className="hover:bg-[#6B48FF10] size-10 rounded-lg cursor-pointer text-[#6B48FF]"
+                  onClick={() => document.getElementById("file-upload")?.click()}
                   disabled={isUploading || isLoading}
                 >
                   {isUploading ? (
-                    <Loader2 className="size-5 text-gray-400 animate-spin" />
+                    <RiLoader2Line className="animate-spin size-5" />
                   ) : (
-                    <Paperclip className="size-5 text-gray-400" />
+                    <RiAttachmentLine className="size-5" />
                   )}
                 </Button>
                 <input
@@ -239,31 +230,32 @@ const QuestionInput = ({
             {setIsUseDeepResearch && (
               <Button
                 variant="outline"
-                className={`h-10 cursor-pointer shadow-sm ${
+                className={cn(
+                  "h-10 cursor-pointer rounded-lg border transition-colors",
                   isUseDeepResearch
-                    ? "bg-gradient-skyblue-lavender !text-black"
-                    : "border !border-[#ffffff0f] bg-transparent"
-                }`}
+                    ? "bg-[#6B48FF] text-white hover:bg-[#5A3CD9] border-[#6B48FF]"
+                    : "border-[#6B48FF40] text-[#6B48FF] hover:bg-[#6B48FF10]"
+                )}
                 onClick={() => setIsUseDeepResearch?.(!isUseDeepResearch)}
                 disabled={isLoading}
               >
-                Deep Research
+                深度研究
               </Button>
             )}
           </div>
 
-          <div className="flex items-center gap-x-2">
+          <div className="flex gap-x-2 items-center">
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="hover:bg-gray-700/50 size-10 rounded-full cursor-pointer border border-[#ffffff0f] shadow-sm"
+                  className="hover:bg-[#6B48FF10] size-10 rounded-lg cursor-pointer text-[#6B48FF]"
                   onClick={handleEnhancePrompt}
                   disabled={isGeneratingPrompt}
                 >
                   {isGeneratingPrompt ? (
-                    <Loader2 className="size-5 text-gray-400 animate-spin" />
+                    <RiLoader2Line className="animate-spin size-5" />
                   ) : (
                     <Image
                       src="/icons/AI.svg"
@@ -274,22 +266,26 @@ const QuestionInput = ({
                   )}
                 </Button>
               </TooltipTrigger>
-              <TooltipContent>Enhance Prompt</TooltipContent>
+              <TooltipContent>优化提示词</TooltipContent>
             </Tooltip>
             {isLoading && handleCancel ? (
               <Button
                 onClick={handleCancel}
-                className="cursor-pointer size-10 font-bold p-0 !bg-black rounded-full hover:scale-105 active:scale-95 transition-transform shadow-[0_4px_10px_rgba(0,0,0,0.2)]"
+                className="p-0 font-bold bg-gray-100 rounded-lg transition-colors cursor-pointer size-10 hover:bg-gray-200"
               >
-                <div className="size-3 rounded-xs bg-white" />
+                <div className="bg-gray-600 size-3 rounded-xs" />
               </Button>
             ) : (
               <Button
                 disabled={!value.trim() || isDisabled || isLoading}
                 onClick={() => handleSubmit(value)}
-                className="cursor-pointer !border !border-red p-4 size-10 font-bold bg-gradient-skyblue-lavender rounded-full hover:scale-105 active:scale-95 transition-transform shadow-[0_4px_10px_rgba(0,0,0,0.2)]"
+                className={cn(
+                  "cursor-pointer size-10 font-bold rounded-lg transition-colors",
+                  "bg-[#6B48FF] hover:bg-[#5A3CD9] text-white",
+                  "disabled:bg-gray-100 disabled:text-gray-400"
+                )}
               >
-                <ArrowUp className="size-5" />
+                <RiArrowUpLine className="size-5" />
               </Button>
             )}
           </div>

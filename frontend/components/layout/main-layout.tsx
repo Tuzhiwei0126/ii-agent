@@ -14,18 +14,18 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
 
   return (
     <AppProvider>
-    <div className="flex h-screen bg-gray-50">
-      <MenuList  />
-      <FloatMenu />
+      <div className="flex h-screen bg-gray-50">
+        <MenuList />
+        <FloatMenu />
 
-      {/* 主内容区域 */}
-      <div className="overflow-hidden flex-1 bg-white">
-        <div className="mt-4 h-full mr-4 overflow-y-auto rounded-tl-2xl p-6
-          shadow-[inset_0_0_10px_rgba(225,218,255,0.5),inset_0_4px_12px_rgba(225,218,255,0.3)]">
-          {children}
-        </div>
+        {/* 主内容区域 */}
+        <main className="flex-1 bg-white">
+          <div className="h-[calc(100%-2rem)] mx-4 my-4 rounded-2xl p-6
+            shadow-[inset_0_0_10px_rgba(225,218,255,0.5),inset_0_4px_12px_rgba(225,218,255,0.3)]">
+            {children}
+          </div>
+        </main>
       </div>
-    </div>
     </AppProvider>
   )
 }
