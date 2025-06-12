@@ -44,7 +44,7 @@ const EditQuestion = ({
         damping: 30,
         mass: 1,
       }}
-      className={`w-full max-w-2xl z-50 ${className}`}
+      className={`z-50 w-full max-w-2xl ${className}`}
     >
       <motion.div
         className="relative rounded-xl"
@@ -53,14 +53,14 @@ const EditQuestion = ({
         transition={{ delay: 0.1 }}
       >
         <Textarea
-          className={`w-full p-0 pb-[72px] rounded-xl !text-lg focus-visible:ring-0 resize-none !placeholder-gray-400 !bg-[#35363a] border-none h-50 ${textareaClassName}`}
+          className={`w-full p-0 pb-[72px] rounded-xl !text-lg focus-visible:ring-0 resize-none !placeholder-gray-400  border-none h-50 ${textareaClassName}`}
           placeholder={"Ask me anything..."}
           value={value}
           onChange={(e) => setValue(e.target.value)}
           onKeyDown={handleKeyDown}
         />
-        <div className="flex justify-end items-center absolute bottom-0 m-px w-[calc(100%-4px)] rounded-b-xl bg-[#35363a]">
-          <div className="flex items-center gap-x-2">
+        <div className="flex justify-end items-center absolute bottom-0 m-px w-[calc(100%-4px)] rounded-b-xl">
+          <div className="flex gap-x-2 items-center">
             <Button
               onClick={handleCancel}
               className="cursor-pointer h-10 bg-transparent text-white hover:bg-transparent border border-[#ffffff0f] hover:scale-105 active:scale-95 transition-transform"

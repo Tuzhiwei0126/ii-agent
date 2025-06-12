@@ -10,6 +10,7 @@ export type Source = {
 };
 
 export enum AgentEvent {
+  AGENT_QUESTION = "agent_question",
   USER_MESSAGE = "user_message",
   CONNECTION_ESTABLISHED = "connection_established",
   WORKSPACE_INFO = "workspace_info",
@@ -100,6 +101,32 @@ export interface Message {
   action?: ActionStep;
   files?: string[]; // File names
   fileContents?: { [filename: string]: string }; // Base64 content of files
+  formConfig?: {
+    title?: string;
+    description?: string;
+    fields: Array<{
+      id: string;
+      type: 'text' | 'textarea' | 'select' | 'checkbox' | 'radio' | 'number' | 'email' | 'url';
+      label: string;
+      placeholder?: string;
+      required?: boolean;
+      options?: { value: string; label: string }[];
+      defaultValue?: string | number | boolean;
+      validation?: {
+        min?: number;
+        max?: number;
+        pattern?: string;
+        minLength?: number;
+        maxLength?: number;
+      };
+    }>;
+    submitButton?: {
+      text: string;
+      variant?: 'default' | 'secondary' | 'outline';
+    };
+  };
+  htmlForm?: string; // HTML表单字符串
+  isFormSubmitted?: boolean;
 }
 
 export interface ISession {

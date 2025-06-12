@@ -9,6 +9,7 @@ import rehypeMathJax from "rehype-mathjax";
 import rehypeKatex from "rehype-katex";
 
 import "katex/dist/katex.min.css";
+import "./markdown.css";
 
 interface MarkdownProps {
   children: string | null | undefined;
@@ -16,13 +17,21 @@ interface MarkdownProps {
 
 const Markdown = ({ children }: MarkdownProps) => {
   return (
-    <div className="markdown-body">
+    <div className="markdown-container">
       <ReactMarkdown
         remarkPlugins={[remarkGfm, rehypeHighlight, remarkMath]}
         rehypePlugins={[rehypeRaw, rehypeMathJax, rehypeKatex]}
         components={{
           a: ({ ...props }) => (
-            <a target="_blank" rel="noopener noreferrer" {...props} />
+            <a target="_blank" rel="noopener noreferrer" className="markdown-link" {...props} />
+          ),
+          code: ({ inline, children, ...props }) => (
+            <code className={`markdown-code ${inline ? 'inline-code' : 'block-code'}`} {...props}>
+              {children}
+            </code>
+          ),
+          pre: ({ children }) => (
+            <pre className="markdown-pre">{children}</pre>
           ),
         }}
       >

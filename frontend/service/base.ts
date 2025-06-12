@@ -53,7 +53,7 @@ const request = async <T>(url: string, config: RequestConfig = {}): Promise<T> =
       headers: {
         'Content-Type': 'application/json',
         // 添加 token 到请求头
-        'Authorization': token.get() ? `Bearer ${token.get()}` : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDk3ODU1OTksInN1YiI6IjFlY2JhODIwLWYyYjItNDBmYy04OGRkLTJmYTg4ZDY0NDQzMiJ9.XZTlgJAzfCYGfo-DzPvgywaNMVlJjMJgE6kkpfbjBFM',
+        'Authorization': token.get() ? `Bearer ${token.get()}` : 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDk3ODU1OTksInN1YiI6IjFlY2JhODIwLWYyYjItNDBmYy04OGRkLTJmYTg4ZDY0NDQzMiJ9.XZTlgJAzfCYGfo-DzPvgywaNMVlJjMJgE6kkpfbjBFM',
         ...restConfig.headers,
       },
     });

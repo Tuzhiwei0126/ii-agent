@@ -51,7 +51,7 @@ const SidebarButton = ({ className, workspaceInfo }: SidebarButtonProps) => {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/sessions/${deviceId}`
+        `${process.env.NEXT_PUBLIC_API_URL}/chat/sessions/${deviceId}`
       );
 
       if (!response.ok) {

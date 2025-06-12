@@ -9,6 +9,11 @@ import {
   RiCloseLine,
   RiLoader4Line,
   RiShareLine,
+  RiDownload2Line,
+  RiFileLine,
+  RiFilePdfLine,
+  RiImageLine,
+  RiFileWordLine,
 } from "@remixicon/react";
 import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -72,6 +77,9 @@ export default function Home() {
   const [browserUrl, setBrowserUrl] = useState("");
   const [isGeneratingPrompt, setIsGeneratingPrompt] = useState(false);
   const [editingMessage, setEditingMessage] = useState<Message>();
+  const [showDownloadOptions, setShowDownloadOptions] = useState(false);
+  const [fileName, setFileName] = useState('预览文件');
+  const [content, setContent] = useState('');
 
   const isReplayMode = useMemo(() => !!searchParams.get("id"), [searchParams]);
 
@@ -541,6 +549,27 @@ export default function Home() {
         ]);
 
         break;
+      case AgentEvent.AGENT_QUESTION:
+        // 检查是否包含表单配置或HTML表单
+        const questionText = data.content.text as string;
+        const isHtmlForm = questionText && questionText.includes('<form');
+         if (isHtmlForm) {
+          // HTML表单字符串
+          setMessages((prev) => [
+            ...prev,
+            {
+              id: data.id,
+              role: "assistant",
+              content: "请填写以下表单：",
+              htmlForm: questionText,
+              timestamp: Date.now(),
+            },
+          ]);
+        } else {
+          // 普通问题
+          setCurrentQuestion(questionText);
+        }
+        break;
       case AgentEvent.PROMPT_GENERATED:
         setIsGeneratingPrompt(false);
         setCurrentQuestion(data.content.result as string);
@@ -787,9 +816,14 @@ export default function Home() {
   useEffect(() => {
     // Connect to WebSocket when the component mounts
     const connectWebSocket = () => {
-      const params = new URLSearchParams({ device_id: deviceId });
+      // const params = new URLSearchParams({ device_id: deviceId });
+      // const params = new URLSearchParams({ device_id: "32131212" });
+      // const ws = new WebSocket(
+      //   `${process.env.NEXT_PUBLIC_API_URL}/chat/ws?${params.toString()}`
+      // );
+      const params = new URLSearchParams({ device_id: "32131212" });
       const ws = new WebSocket(
-        `${process.env.NEXT_PUBLIC_API_URL}/ws?${params.toString()}`
+        `${process.env.NEXT_PUBLIC_API_URL}/chat/ws`
       );
 
       ws.onopen = () => {
@@ -862,8 +896,79 @@ export default function Home() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages?.length]);
 
+  const handleDownload = (type: 'word' | 'pdf' | 'markdown' | 'html' | 'image') => {
+    // 创建下载链接
+    const downloadContent = (filename: string, text: string, mimeType: string) => {
+      const blob = new Blob([text], { type: mimeType })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = filename
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      URL.revokeObjectURL(url)
+    }
+
+    // 根据类型处理不同的下载逻辑
+    if (type === 'markdown') {
+      downloadContent(`${fileName}.md`, content, 'text/markdown')
+    } else if (type === 'html') {
+      downloadContent(`${fileName}.html`, content, 'text/html')
+    } else if (type === 'pdf') {
+      const fileId = localStorage.getItem('summary_file_id')
+      if (fileId) {
+        // window.open(`/api/v1/file/download?file_id=${fileId}`, '_blank')
+      }
+      // 对于需要转换的格式，显示通知
+      toast.success(`正在导出为${type}格式`)
+      // 这里可以添加转换和下载的逻辑
+    }
+    toast.success(`正在导出为${type}格式`)
+    setShowDownloadOptions(false)
+  }
+
+  const handleFormSubmit = (messageId: string, formData: Record<string, unknown>) => {
+    if (!socket || socket.readyState !== WebSocket.OPEN) {
+      toast.error("WebSocket connection is not open. Please try again.");
+      return;
+    }
+
+    // 标记表单已提交
+    setMessages((prev) => prev.map(msg => 
+      msg.id === messageId 
+        ? { ...msg, isFormSubmitted: true }
+        : msg
+    ));
+
+    // 发送表单数据到服务器
+    socket.send(
+      JSON.stringify({
+        type: "query",
+        content: {
+          text: JSON.stringify(formData),
+          resume: true,
+        },
+  
+      })
+    );
+
+    // 添加用户消息显示表单提交内容
+    const formSummary = Object.entries(formData)
+      .map(([key, value]) => `${key}: ${value}`)
+      .join('\n');
+    
+    setMessages((prev) => [...prev, {
+      id: Date.now().toString(),
+      role: "user",
+      content: `表单提交：\n${formSummary}`,
+      timestamp: Date.now(),
+    }]);
+  };
+
+  // 当预览面板展开时，自动收起左侧菜单栏
   return (
-    <div className="flex h-[calc(100%-2rem)] overflow-hidden">
+    <div className="flex overflow-hidden h-full">
       <SidebarButton className="flex-shrink-0" />
       <div className="flex flex-col flex-1 min-h-0">
         <div
@@ -904,7 +1009,7 @@ export default function Home() {
           <LayoutGroup>
             <AnimatePresence mode="wait">
               {!isInChatView ? (
-                <div className="flex flex-1 justify-center items-end mb-4">
+                <div className="flex flex-1 justify-center items-end mb-1">
                   <QuestionInput
                     placeholder="Give GoAgent a task to work on..."
                     value={currentQuestion}
@@ -932,9 +1037,9 @@ export default function Home() {
                     damping: 30,
                     mass: 1,
                   }}
-                  className="grid flex-1 grid-cols-9 pr-4 pb-4 w-full min-h-0 write-report"
+                  className="grid flex-1 grid-cols-9 pb-4 w-full min-h-0 write-report"
                 >
-                  <div className="overflow-y-auto col-span-4 pr-2 min-h-0">
+                  <div className="col-span-4 pr-2 min-h-0">
                     <div className="h-full">
                       <ChatMessage
                         messages={messages}
@@ -958,6 +1063,7 @@ export default function Home() {
                         editingMessage={editingMessage}
                         setEditingMessage={setEditingMessage}
                         handleEditMessage={handleEditMessage}
+                        handleFormSubmit={handleFormSubmit}
                       />
                     </div>
                   </div>
@@ -999,20 +1105,63 @@ export default function Home() {
                           <RiTerminalLine className="mr-2 size-4" /> Terminal
                         </Button>
                       </div>
-                      {/* <Button
-                        className="text-gray-300 transition-all duration-200 cursor-pointer border-purple-500/30 hover:border-purple-500 hover:bg-purple-500/10"
-                        variant="outline"
-                        onClick={handleOpenVSCode}
-                      >
-                        <Image
-                          src={"/vscode.png"}
-                          alt="VS Code"
-                          width={20}
-                          height={20}
-                          className="mr-2"
-                        />
-                        Open with VS Code
-                      </Button> */}
+                      <div className="relative">
+                        <Button
+                          className="flex items-center px-3 py-2 text-xs text-gray-500 rounded-md border-none transition-colors duration-200 hover:bg-gray-100 bg-white/5 hover:bg-white/10"
+                          variant="outline"
+                          onClick={() => setShowDownloadOptions(!showDownloadOptions)}
+                        >
+                          <RiDownload2Line className="mr-1 w-4 h-4" />
+                          <span>下载</span>
+                        </Button>
+
+                        {showDownloadOptions && (
+                          <div className="absolute right-0 z-10 mt-1 w-48 rounded-lg shadow-lg backdrop-blur-sm bg-white/95">
+                            <div className="py-1">
+                              <button
+                                className="flex items-center px-4 py-2 w-full text-sm text-gray-700 transition-colors duration-200 hover:bg-gray-50"
+                                onClick={() => handleDownload('markdown')}
+                              >
+                                <RiFileLine className="mr-2 w-4 h-4 text-blue-500" />
+                                <span className="mr-2">Markdown</span>
+                                <span className="text-xs text-gray-400">直接导出</span>
+                              </button>
+                              <button
+                                className="flex items-center px-4 py-2 w-full text-sm text-gray-700 transition-colors duration-200 hover:bg-gray-50"
+                                onClick={() => handleDownload('html')}
+                              >
+                                <RiFilePdfLine className="mr-2 w-4 h-4 text-orange-500" />
+                                <span className="mr-2">HTML</span>
+                                <span className="text-xs text-gray-400">直接导出</span>
+                              </button>
+                              <button
+                                className="flex items-center px-4 py-2 w-full text-sm text-gray-700 transition-colors duration-200 hover:bg-gray-50"
+                                onClick={() => handleDownload('pdf')}
+                              >
+                                <RiImageLine className="mr-2 w-4 h-4 text-red-500" />
+                                <span className="mr-2">PDF</span>
+                                <span className="text-xs text-gray-400">转换后下载</span>
+                              </button>
+                              <button
+                                className="flex items-center px-4 py-2 w-full text-sm text-gray-700 transition-colors duration-200 hover:bg-gray-50"
+                                onClick={() => handleDownload('image')}
+                              >
+                                <RiImageLine className="mr-2 w-4 h-4 text-green-500" />
+                                <span className="mr-2">图片</span>
+                                <span className="text-xs text-gray-400">转换后下载</span>
+                              </button>
+                              <button
+                                className="flex items-center px-4 py-2 w-full text-sm text-gray-700 transition-colors duration-200 hover:bg-gray-50"
+                                onClick={() => handleDownload('word')}
+                              >
+                                <RiFileLine className="mr-2 w-4 h-4 text-blue-600" />
+                                <span className="mr-2">Word</span>
+                                <span className="text-xs text-gray-400">转换后下载</span>
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     </div>
                     <div className="overflow-y-auto flex-1 min-h-0 bg-[#F9F8FF] rounded-lg">
                       <div className="h-full">

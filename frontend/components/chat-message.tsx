@@ -1,11 +1,14 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Check, CircleStop, Pencil } from "lucide-react";
+import { Pencil } from "lucide-react";
+import { RiCheckFill, RiStopCircleFill } from "@remixicon/react";
 
 import Action from "@/components/action";
 import Markdown from "@/components/markdown";
 import QuestionInput from "@/components/question-input";
+import DynamicForm from "@/components/dynamic-form";
+import HtmlForm from "@/components/html-form";
 import { ActionStep, Message } from "@/typings/agent";
 import { getFileIconAndColor } from "@/utils/file-utils";
 import { Button } from "./ui/button";
@@ -36,6 +39,7 @@ interface ChatMessageProps {
   editingMessage: Message | undefined;
   setEditingMessage: (message: Message | undefined) => void;
   handleEditMessage: (newContent: string) => void;
+  handleFormSubmit?: (messageId: string, formData: Record<string, unknown>) => void;
 }
 
 const ChatMessage = ({
@@ -60,6 +64,7 @@ const ChatMessage = ({
   editingMessage,
   setEditingMessage,
   handleEditMessage,
+  handleFormSubmit,
 }: ChatMessageProps) => {
   // Helper function to check if a message is the latest user message
   const isLatestUserMessage = (
@@ -74,7 +79,7 @@ const ChatMessage = ({
   };
 
   return (
-    <div className="col-span-4">
+    <div className="col-span-4 h-full">
       <motion.div
         className="p-4 pt-0 w-full h-full max-h-[calc(100vh-230px)] overflow-y-auto relative"
         initial={{ opacity: 0 }}
@@ -200,6 +205,28 @@ const ChatMessage = ({
                 ) : (
                   <Markdown>{message.content}</Markdown>
                 )}
+                
+                {/* 表单渲染 */}
+                {message.formConfig && handleFormSubmit && (
+                  <div className="mt-4">
+                    <DynamicForm
+                      formConfig={message.formConfig}
+                      onSubmit={(formData) => handleFormSubmit(message.id, formData)}
+                      isSubmitting={message.isFormSubmitted || false}
+                    />
+                  </div>
+                )}
+                
+                {/* HTML表单渲染 */}
+                {message.htmlForm && handleFormSubmit && (
+                  <div className="mt-4">
+                    <HtmlForm
+                      htmlContent={message.htmlForm}
+                      onSubmit={(formData) => handleFormSubmit(message.id, formData)}
+                      isSubmitting={message.isFormSubmitted || false}
+                    />
+                  </div>
+                )}
               </motion.div>
             )}
 
@@ -233,7 +260,7 @@ const ChatMessage = ({
             }}
           >
             <motion.div
-              className="inline-block p-3 text-left rounded-lg bg-neutral-800/90 text-[#777777] backdrop-blur-sm"
+              className="inline-block p-4 text-left bg-gray-50 rounded-xl border border-gray-200 shadow-sm"
               initial={{ scale: 0.95 }}
               animate={{ scale: 1 }}
               transition={{
@@ -243,28 +270,125 @@ const ChatMessage = ({
               }}
             >
               <div className="flex gap-3 items-center">
-                <div className="flex space-x-2">
-                  <div className="w-2 h-2 bg-white rounded-full animate-[dot-bounce_1.2s_ease-in-out_infinite_0ms]" />
-                  <div className="w-2 h-2 bg-white rounded-full animate-[dot-bounce_1.2s_ease-in-out_infinite_200ms]" />
-                  <div className="w-2 h-2 bg-white rounded-full animate-[dot-bounce_1.2s_ease-in-out_infinite_400ms]" />
+                {/* 简洁的加载动画 */}
+                <div className="flex space-x-1">
+                  <motion.div 
+                    className="w-2 h-2 bg-blue-500 rounded-full"
+                    animate={{ 
+                      scale: [1, 1.2, 1],
+                      opacity: [0.5, 1, 0.5]
+                    }}
+                    transition={{ 
+                      duration: 1,
+                      repeat: Infinity,
+                      delay: 0
+                    }}
+                  />
+                  <motion.div 
+                    className="w-2 h-2 bg-blue-500 rounded-full"
+                    animate={{ 
+                      scale: [1, 1.2, 1],
+                      opacity: [0.5, 1, 0.5]
+                    }}
+                    transition={{ 
+                      duration: 1,
+                      repeat: Infinity,
+                      delay: 0.2
+                    }}
+                  />
+                  <motion.div 
+                    className="w-2 h-2 bg-blue-500 rounded-full"
+                    animate={{ 
+                      scale: [1, 1.2, 1],
+                      opacity: [0.5, 1, 0.5]
+                    }}
+                    transition={{ 
+                      duration: 1,
+                      repeat: Infinity,
+                      delay: 0.4
+                    }}
+                  />
                 </div>
+                
+                {/* 简洁的文字 */}
+                <span className="text-sm font-medium text-gray-600">
+                  正在思考中...
+                </span>
               </div>
             </motion.div>
           </motion.div>
         )}
 
         {isCompleted && (
-          <div className="flex gap-x-2 items-center bg-[#25BA3B1E] text-[#444444] text-sm p-2 rounded-full">
-            <Check className="size-4" />
-            <span>GoAgent has completed the current task.</span>
-          </div>
+          <motion.div 
+            className="flex gap-3 items-center px-4 py-3 text-sm bg-green-50 rounded-xl border border-green-200 shadow-sm"
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ 
+              type: "spring", 
+              stiffness: 300, 
+              damping: 25,
+              delay: 0.2 
+            }}
+            whileHover={{ scale: 1.01 }}
+          >
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ 
+                type: "spring",
+                stiffness: 500,
+                damping: 30,
+                delay: 0.3
+              }}
+            >
+              <RiCheckFill className="text-green-600 size-5" />
+            </motion.div>
+            <div>
+              <span className="font-medium text-green-800">
+                任务完成
+              </span>
+              <div className="text-xs text-green-600 mt-0.5">
+                可以继续提问或开始新任务
+              </div>
+            </div>
+          </motion.div>
         )}
 
         {isStopped && (
-          <div className="flex gap-x-2 items-center bg-[#ffbf361f] text-[#555555] text-sm p-2 rounded-full">
-            <CircleStop className="size-4" />
-            <span>GoAgent has stopped, send a new message to continue.</span>
-          </div>
+          <motion.div 
+            className="flex gap-3 items-center px-4 py-3 text-sm bg-orange-50 rounded-xl border border-orange-200 shadow-sm"
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ 
+              type: "spring", 
+              stiffness: 300, 
+              damping: 25,
+              delay: 0.2 
+            }}
+            whileHover={{ scale: 1.01 }}
+          >
+            <motion.div
+              animate={{ 
+                rotate: [0, 10, -10, 0]
+              }}
+              transition={{ 
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            >
+              <RiStopCircleFill className="text-orange-600 size-5" />
+            </motion.div>
+            <div>
+              <span className="font-medium text-orange-800">
+                任务已暂停
+              </span>
+              <div className="text-xs text-orange-600 mt-0.5">
+                准备好时可以继续
+              </div>
+            </div>
+          </motion.div>
         )}
 
         <div ref={messagesEndRef} />
@@ -276,7 +400,7 @@ const ChatMessage = ({
         transition={{ delay: 0.2, duration: 0.3 }}
       >
         <QuestionInput
-          className="p-4 pb-0 w-full max-w-none"
+          className="px-2 pb-2 w-full max-w-none"
           textareaClassName="h-30 w-full"
           placeholder="Ask me anything..."
           value={currentQuestion}

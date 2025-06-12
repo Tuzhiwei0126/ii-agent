@@ -23,6 +23,42 @@ import {
 } from "lucide-react";
 import { useEffect, useMemo, useRef } from "react";
 
+// 添加颜色映射对象
+const iconColors: Record<TOOL, string> = {
+  [TOOL.SEQUENTIAL_THINKING]: "text-blue-400",
+  [TOOL.MESSAGE_USER]: "text-blue-400",
+  [TOOL.WEB_SEARCH]: "text-green-400",
+  [TOOL.IMAGE_SEARCH]: "text-purple-400",
+  [TOOL.VISIT]: "text-indigo-400",
+  [TOOL.BROWSER_USE]: "text-indigo-400",
+  [TOOL.BASH]: "text-orange-400",
+  [TOOL.STR_REPLACE_EDITOR]: "text-cyan-400",
+  [TOOL.STATIC_DEPLOY]: "text-pink-400",
+  [TOOL.PDF_TEXT_EXTRACT]: "text-red-400",
+  [TOOL.AUDIO_TRANSCRIBE]: "text-yellow-400",
+  [TOOL.GENERATE_AUDIO_RESPONSE]: "text-yellow-400",
+  [TOOL.VIDEO_GENERATE]: "text-rose-400",
+  [TOOL.IMAGE_GENERATE]: "text-purple-400",
+  [TOOL.DEEP_RESEARCH]: "text-emerald-400",
+  [TOOL.PRESENTATION]: "text-violet-400",
+  [TOOL.BROWSER_WAIT]: "text-slate-400",
+  [TOOL.BROWSER_VIEW]: "text-indigo-400",
+  [TOOL.BROWSER_NAVIGATION]: "text-indigo-400",
+  [TOOL.BROWSER_RESTART]: "text-indigo-400",
+  [TOOL.BROWSER_SCROLL_DOWN]: "text-indigo-400",
+  [TOOL.BROWSER_SCROLL_UP]: "text-indigo-400",
+  [TOOL.BROWSER_CLICK]: "text-indigo-400",
+  [TOOL.BROWSER_ENTER_TEXT]: "text-indigo-400",
+  [TOOL.BROWSER_PRESS_KEY]: "text-indigo-400",
+  [TOOL.BROWSER_GET_SELECT_OPTIONS]: "text-indigo-400",
+  [TOOL.BROWSER_SELECT_DROPDOWN_OPTION]: "text-indigo-400",
+  [TOOL.BROWSER_SWITCH_TAB]: "text-indigo-400",
+  [TOOL.BROWSER_OPEN_NEW_TAB]: "text-indigo-400",
+  [TOOL.COMPLETE]: "text-neutral-400",
+  [TOOL.LIST_HTML_LINKS]: "text-neutral-400",
+  [TOOL.RETURN_CONTROL_TO_USER]: "text-neutral-400",
+} as const;
+
 interface ActionProps {
   workspaceInfo: string;
   type: TOOL;
@@ -40,7 +76,7 @@ const Action = ({ workspaceInfo, type, value, onClick }: ActionProps) => {
   }, []);
 
   const step_icon = useMemo(() => {
-    const className = "h-4 w-4 text-neutral-100 flex-shrink-0 mt-[2px]";
+    const className = `h-4 w-4 flex-shrink-0 mt-[2px] ${iconColors[type] || "text-neutral-400"}`;
     switch (type) {
       case TOOL.SEQUENTIAL_THINKING:
       case TOOL.MESSAGE_USER:

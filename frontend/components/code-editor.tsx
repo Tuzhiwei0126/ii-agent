@@ -169,9 +169,9 @@ const CodeEditor = ({
     const folderName = ROOT_NAME;
 
     return (
-      <div className="flex items-center gap-2 px-2 py-1 text-sm text-purple-800 border-b border-purple-200 bg-purple-100">
+      <div className="flex gap-2 items-center px-2 py-1 text-sm text-purple-800 bg-purple-100 border-b border-purple-200">
         <span className="text-purple-800">{folderName}</span>
-        <ChevronRightIcon className="h-4 w-4" />
+        <ChevronRightIcon className="w-4 h-4" />
         <span className="text-purple-900">{fileName}</span>
       </div>
     );
@@ -223,15 +223,15 @@ const CodeEditor = ({
         return (
           <div key={fullPath}>
             <button
-              className="flex items-center gap-2 w-full px-2 py-1 hover:bg-purple-200 text-left text-sm text-purple-800"
+              className="flex gap-2 items-center px-2 py-1 w-full text-sm text-left text-purple-800 hover:bg-purple-200"
               onClick={() => toggleFolder(fullPath)}
             >
               {isExpanded ? (
-                <ChevronDown className="h-4 w-4" />
+                <ChevronDown className="w-4 h-4" />
               ) : (
-                <ChevronRight className="h-4 w-4" />
+                <ChevronRight className="w-4 h-4" />
               )}
-              <Folder className="h-4 w-4" />
+              <Folder className="w-4 h-4" />
               {item.name}
             </button>
             {isExpanded && item.children && (
@@ -253,7 +253,7 @@ const CodeEditor = ({
             setActiveFile?.(fullPath);
           }}
         >
-          <File className="h-4 w-4" />
+          <File className="w-4 h-4" />
           {item.name}
         </button>
       );
@@ -262,11 +262,11 @@ const CodeEditor = ({
 
   return (
     <div
-      className={`flex flex-col h-[calc(100vh-178px)] rounded-xl border border-purple-300 bg-white shadow-md overflow-hidden ${className}`}
+      className={`flex overflow-hidden flex-col bg-white rounded-xl border border-purple-300 shadow-md h-[calc(100vh-178px)] ${className}`}
     >
       <div className="flex flex-1 h-full">
         {/* File Explorer */}
-        <div className="w-64 bg-purple-100 border-r border-purple-200 flex flex-col">
+        <div className="flex flex-col w-48 bg-purple-100 border-r border-purple-200">
           <div className="px-3 py-1 text-sm font-medium text-purple-800 border-b border-purple-200">
             {ROOT_NAME}
           </div>
@@ -276,7 +276,7 @@ const CodeEditor = ({
         </div>
 
         {/* Editor Section */}
-        <div className="flex-1 flex flex-col overflow-y-auto">
+        <div className="flex overflow-y-auto flex-col flex-1">
           {renderBreadcrumb()}
           <Editor
             theme="vs-light"
