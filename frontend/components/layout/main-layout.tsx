@@ -20,7 +20,7 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
 
         {/* 主内容区域 */}
         <main className="flex-1 bg-white">
-          <div className="h-[calc(100%-2rem)] mx-4 my-4 rounded-2xl p-6
+          <div className="h-[calc(100%-2rem)] mx-4 my-4 rounded-2xl bg-white p-6
             shadow-[inset_0_0_10px_rgba(225,218,255,0.5),inset_0_4px_12px_rgba(225,218,255,0.3)]">
             {children}
           </div>

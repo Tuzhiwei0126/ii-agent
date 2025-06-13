@@ -302,21 +302,25 @@ const Action = ({ workspaceInfo, type, value, onClick }: ActionProps) => {
   return (
     <div
       onClick={onClick}
-      className={`group cursor-pointer flex items-start gap-2 px-3 py-2 bg-purple-50 rounded-xl backdrop-blur-sm 
-      shadow-sm
+      className={`group cursor-pointer flex items-center gap-3 px-4 py-2 bg-blue-50/60 rounded-lg
+      shadow-[0_2px_8px_rgba(0,0,0,0.04)]
       transition-all duration-200 ease-out
-      hover:bg-purple-100
-      hover:border-purple-200
-      hover:shadow-[0_2px_8px_rgba(147,51,234,0.15)]
+      hover:bg-blue-50/80
+      hover:shadow-[0_4px_12px_rgba(0,0,0,0.06)]
       active:scale-[0.98] overflow-hidden
       ${hasAnimated.current ? "animate-none" : "animate-fadeIn"}`}
     >
-      {step_icon}
-      <div className="flex flex-col gap-1.5 text-sm">
-        <span className="font-medium text-slate-600 group-hover:text-slate-700">
+      <div className="flex gap-2 items-center">
+        <span className="text-sm font-bold tracking-wide text-blue-500">MCP工具</span>
+        <span className="text-blue-100">|</span>
+        {step_icon}
+      </div>
+      <div className="flex gap-2 items-center text-sm">
+        <span className="font-medium text-blue-500 group-hover:text-blue-600">
           {step_title}
         </span>
-        <span className="font-medium truncate text-slate-500 group-hover:text-slate-600">
+        <span className="text-blue-100">·</span>
+        <span className="italic font-normal text-blue-400 group-hover:text-blue-500">
           {step_value}
         </span>
       </div>

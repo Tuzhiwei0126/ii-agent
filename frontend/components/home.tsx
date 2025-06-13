@@ -4,7 +4,6 @@ import { Terminal as XTerm } from "@xterm/xterm";
 import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 import {
   RiGlobalLine,
-  RiCodeLine,
   RiTerminalLine,
   RiCloseLine,
   RiLoader4Line,
@@ -14,6 +13,9 @@ import {
   RiFilePdfLine,
   RiImageLine,
   RiFileWordLine,
+  RiEyeLine,
+  RiCodeSSlashLine,
+  RiFileMarkedLine,
 } from "@remixicon/react";
 import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -80,6 +82,7 @@ export default function Home() {
   const [showDownloadOptions, setShowDownloadOptions] = useState(false);
   const [fileName, setFileName] = useState('预览文件');
   const [content, setContent] = useState('');
+  const [viewMode, setViewMode] = useState<'preview' | 'code'>('preview');
 
   const isReplayMode = useMemo(() => !!searchParams.get("id"), [searchParams]);
 
@@ -755,7 +758,7 @@ export default function Home() {
           {
             id: Date.now().toString(),
             role: "assistant",
-            content: data.content.text as string,
+            // content: data.content.text as string,
             timestamp: Date.now(),
           },
         ]);
@@ -968,7 +971,7 @@ export default function Home() {
 
   // 当预览面板展开时，自动收起左侧菜单栏
   return (
-    <div className="flex overflow-hidden h-full">
+    <div className="flex overflow-hidden h-full bg-white">
       <SidebarButton className="flex-shrink-0" />
       <div className="flex flex-col flex-1 min-h-0">
         <div
@@ -980,7 +983,7 @@ export default function Home() {
           {isInChatView ? (
             <div className="flex gap-x-2">
               <Button
-                className="flex gap-2 items-center px-3 h-8 text-gray-300 transition-all duration-200 cursor-pointer bg-white/5 hover:bg-white/10 border-purple-500/20 hover:text-white"
+                className="flex gap-2 items-center px-3 h-8 text-gray-700 bg-white border border-gray-200 shadow-sm transition-all duration-200 cursor-pointer hover:bg-gray-50 hover:border-gray-300"
                 variant="outline"
                 onClick={handleShare}
               >
@@ -988,7 +991,7 @@ export default function Home() {
                 <span className="text-sm">分享</span>
               </Button>
               <Button 
-                className="flex justify-center items-center p-0 w-8 h-8 text-gray-300 transition-all duration-200 cursor-pointer bg-white/5 hover:bg-white/10 border-purple-500/20 hover:text-white"
+                className="flex justify-center items-center p-0 w-8 h-8 text-gray-700 bg-white border border-gray-200 shadow-sm transition-all duration-200 cursor-pointer hover:bg-gray-50 hover:border-gray-300"
                 variant="outline"
                 onClick={resetChat}
               >
@@ -1002,8 +1005,8 @@ export default function Home() {
 
         {isLoadingSession ? (
           <div className="flex flex-col justify-center items-center p-8">
-            <RiLoader4Line className="mb-4 w-8 h-8 text-white animate-spin" />
-            <p className="text-lg text-white">Loading session history...</p>
+            <RiLoader4Line className="mb-4 w-8 h-8 text-blue-500 animate-spin" />
+            <p className="text-lg text-gray-700">Loading session history...</p>
           </div>
         ) : (
           <LayoutGroup>
@@ -1068,46 +1071,37 @@ export default function Home() {
                     </div>
                   </div>
 
-                  <div className="flex flex-col col-span-4 p-4 min-h-0 bg-[#F9F8FF] rounded-2xl border shadow-lg border-purple-500/20">
-                    <div className="flex flex-shrink-0 justify-between items-center pb-4 bg-[#F9F8FF]">
+                  <div className="flex flex-col col-span-4 p-4 min-h-0 bg-white rounded-lg border border-gray-200 shadow-lg">
+                    <div className="flex flex-shrink-0 justify-between items-center pb-4 bg-white">
                       <div className="flex gap-x-4">
-                        <Button
-                          className={`cursor-pointer hover:!bg-purple-500/20 transition-all duration-200 ${
-                            activeTab === TAB.BROWSER
-                              ? "bg-gradient-to-r from-purple-600 to-purple-800 !text-white shadow-md"
-                              : "border-purple-500/30 text-gray-300"
-                          }`}
-                          variant="outline"
-                          onClick={() => setActiveTab(TAB.BROWSER)}
-                        >
-                          <RiGlobalLine className="mr-2 size-4" /> Browser
-                        </Button>
-                        <Button
-                          className={`cursor-pointer hover:!bg-purple-500/20 transition-all duration-200 ${
-                            activeTab === TAB.CODE
-                              ? "bg-gradient-to-r from-purple-600 to-purple-800 !text-white shadow-md"
-                              : "border-purple-500/30 text-gray-300"
-                          }`}
-                          variant="outline"
-                          onClick={() => setActiveTab(TAB.CODE)}
-                        >
-                          <RiCodeLine className="mr-2 size-4" /> 代码
-                        </Button>
-                        {/* <Button
-                          className={`cursor-pointer hover:!bg-purple-500/20 transition-all duration-200 ${
-                            activeTab === TAB.TERMINAL
-                              ? "bg-gradient-to-r from-purple-600 to-purple-800 !text-white shadow-md"
-                              : "border-purple-500/30 text-gray-300"
-                          }`}
-                          variant="outline"
-                          onClick={() => setActiveTab(TAB.TERMINAL)}
-                        >
-                          <RiTerminalLine className="mr-2 size-4" /> Terminal
-                        </Button> */}
+                        <div className="flex overflow-hidden p-1 bg-gray-100 rounded-lg">
+                          <button
+                            className={`flex items-center px-4 py-2 text-xs font-medium transition-all duration-200 rounded-md ${
+                              viewMode === 'preview'
+                                ? 'bg-white text-blue-600 shadow-sm'
+                                : 'text-gray-600 hover:bg-white/50'
+                            }`}
+                            onClick={() => setViewMode('preview')}
+                          >
+                            <RiEyeLine className="mr-1.5 w-4 h-4" />
+                            <span>预览</span>
+                          </button>
+                          <button
+                            className={`flex items-center px-4 py-2 text-xs font-medium transition-all duration-200 rounded-md ${
+                              viewMode === 'code'
+                                ? 'bg-white text-blue-600 shadow-sm'
+                                : 'text-gray-600 hover:bg-white/50'
+                            }`}
+                            onClick={() => setViewMode('code')}
+                          >
+                            <RiCodeSSlashLine className="mr-1.5 w-4 h-4" />
+                            <span>代码</span>
+                          </button>
+                        </div>
                       </div>
                       <div className="relative">
                         <Button
-                          className="flex items-center px-3 py-2 text-xs text-gray-500 rounded-md border-none transition-colors duration-200 hover:bg-gray-100 bg-white/5 hover:bg-white/10"
+                          className="flex items-center px-3 py-2 text-xs text-gray-700 bg-white rounded-md border border-gray-200 shadow-sm transition-colors duration-200 hover:bg-gray-50"
                           variant="outline"
                           onClick={() => setShowDownloadOptions(!showDownloadOptions)}
                         >
@@ -1116,13 +1110,13 @@ export default function Home() {
                         </Button>
 
                         {showDownloadOptions && (
-                          <div className="absolute right-0 z-10 mt-1 w-48 rounded-lg shadow-lg backdrop-blur-sm bg-white/95">
+                          <div className="absolute right-0 z-10 mt-1 w-48 bg-white rounded-lg border border-gray-200 shadow-lg">
                             <div className="py-1">
                               <button
                                 className="flex items-center px-4 py-2 w-full text-sm text-gray-700 transition-colors duration-200 hover:bg-gray-50"
                                 onClick={() => handleDownload('markdown')}
                               >
-                                <RiFileLine className="mr-2 w-4 h-4 text-blue-500" />
+                                <RiFileMarkedLine className="mr-2 w-4 h-4 text-blue-500" />
                                 <span className="mr-2">Markdown</span>
                                 <span className="text-xs text-gray-400">直接导出</span>
                               </button>
@@ -1130,7 +1124,7 @@ export default function Home() {
                                 className="flex items-center px-4 py-2 w-full text-sm text-gray-700 transition-colors duration-200 hover:bg-gray-50"
                                 onClick={() => handleDownload('html')}
                               >
-                                <RiFilePdfLine className="mr-2 w-4 h-4 text-orange-500" />
+                                <RiFileLine className="mr-2 w-4 h-4 text-orange-500" />
                                 <span className="mr-2">HTML</span>
                                 <span className="text-xs text-gray-400">直接导出</span>
                               </button>
@@ -1138,7 +1132,7 @@ export default function Home() {
                                 className="flex items-center px-4 py-2 w-full text-sm text-gray-700 transition-colors duration-200 hover:bg-gray-50"
                                 onClick={() => handleDownload('pdf')}
                               >
-                                <RiImageLine className="mr-2 w-4 h-4 text-red-500" />
+                                <RiFilePdfLine className="mr-2 w-4 h-4 text-red-500" />
                                 <span className="mr-2">PDF</span>
                                 <span className="text-xs text-gray-400">转换后下载</span>
                               </button>
@@ -1154,7 +1148,7 @@ export default function Home() {
                                 className="flex items-center px-4 py-2 w-full text-sm text-gray-700 transition-colors duration-200 hover:bg-gray-50"
                                 onClick={() => handleDownload('word')}
                               >
-                                <RiFileLine className="mr-2 w-4 h-4 text-blue-600" />
+                                <RiFileWordLine className="mr-2 w-4 h-4 text-blue-600" />
                                 <span className="mr-2">Word</span>
                                 <span className="text-xs text-gray-400">转换后下载</span>
                               </button>
@@ -1163,7 +1157,7 @@ export default function Home() {
                         )}
                       </div>
                     </div>
-                    <div className="overflow-y-auto flex-1 min-h-0 bg-[#F9F8FF] rounded-lg">
+                    <div className="overflow-y-auto flex-1 min-h-0 bg-white rounded-lg shadow-inner">
                       <div className="h-full">
                         <Browser
                           className={
@@ -1221,10 +1215,6 @@ export default function Home() {
                           filesContent={filesContent}
                           isReplayMode={isReplayMode}
                         />
-                        {/* <Terminal
-                          ref={xtermRef}
-                          className={activeTab === TAB.TERMINAL ? "" : "hidden"}
-                        /> */}
                       </div>
                     </div>
                   </div>

@@ -1,8 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Pencil } from "lucide-react";
+import { Pencil, Copy, Check } from "lucide-react";
 import { RiCheckFill, RiStopCircleFill } from "@remixicon/react";
+import { useState } from "react";
 
 import Action from "@/components/action";
 import Markdown from "@/components/markdown";
@@ -13,6 +14,7 @@ import { ActionStep, Message } from "@/typings/agent";
 import { getFileIconAndColor } from "@/utils/file-utils";
 import { Button } from "./ui/button";
 import EditQuestion from "./edit-question";
+import { toast } from "sonner";
 
 interface ChatMessageProps {
   messages: Message[];
@@ -66,6 +68,15 @@ const ChatMessage = ({
   handleEditMessage,
   handleFormSubmit,
 }: ChatMessageProps) => {
+  const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null);
+
+  const handleCopyMessage = (content: string, messageId: string) => {
+    navigator.clipboard.writeText(content);
+    setCopiedMessageId(messageId);
+    toast.success("已复制到剪贴板");
+    setTimeout(() => setCopiedMessageId(null), 2000);
+  };
+
   // Helper function to check if a message is the latest user message
   const isLatestUserMessage = (
     message: Message,
@@ -160,8 +171,8 @@ const ChatMessage = ({
               <motion.div
                 className={`inline-block text-left rounded-lg ${
                   message.role === "user"
-                    ? "bg-[#D8D7FF] p-3 max-w-[80%] font-medium font-weight-400 text-sm border-none text-[#444444] border  shadow-sm whitespace-pre-wrap"
-                    : "text-[#333333]"
+                    ? "bg-[#D8D7FF] p-3 max-w-[80%] font-medium font-weight-400 text-sm border-none text-[#444444] shadow-sm whitespace-pre-wrap"
+                    : "p-4 max-w-[80%] text-[#333333]"
                 } ${
                   editingMessage?.id === message.id ? "w-full max-w-none" : ""
                 }`}
@@ -203,7 +214,23 @@ const ChatMessage = ({
                     )}
                   </div>
                 ) : (
-                  <Markdown>{message.content}</Markdown>
+                  <div className="relative group">
+                    <Markdown>{message.content}</Markdown>
+                    <div className="flex absolute top-2 right-2 gap-2 opacity-0 transition-opacity group-hover:opacity-100">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="w-8 h-8 text-gray-500 hover:text-gray-700"
+                        onClick={() => handleCopyMessage(message.content || "", message.id)}
+                      >
+                        {copiedMessageId === message.id ? (
+                          <Check className="w-4 h-4" />
+                        ) : (
+                          <Copy className="w-4 h-4" />
+                        )}
+                      </Button>
+                    </div>
+                  </div>
                 )}
                 
                 {/* 表单渲染 */}
@@ -260,7 +287,7 @@ const ChatMessage = ({
             }}
           >
             <motion.div
-              className="inline-block p-4 text-left bg-gray-50 rounded-xl border border-gray-200 shadow-sm"
+              className="inline-block p-4 text-left rounded-xl shadow-sm bg-gray-50/50"
               initial={{ scale: 0.95 }}
               animate={{ scale: 1 }}
               transition={{
@@ -270,48 +297,49 @@ const ChatMessage = ({
               }}
             >
               <div className="flex gap-3 items-center">
-                {/* 简洁的加载动画 */}
+                {/* Material Design 风格的加载动画 */}
                 <div className="flex space-x-1">
                   <motion.div 
-                    className="w-2 h-2 bg-blue-500 rounded-full"
+                    className="w-2 h-2 bg-blue-400 rounded-full"
                     animate={{ 
-                      scale: [1, 1.2, 1],
-                      opacity: [0.5, 1, 0.5]
+                      scale: [1, 1.5, 1],
+                      opacity: [0.3, 1, 0.3]
                     }}
                     transition={{ 
-                      duration: 1,
+                      duration: 1.4,
                       repeat: Infinity,
-                      delay: 0
+                      ease: "easeInOut"
                     }}
                   />
                   <motion.div 
-                    className="w-2 h-2 bg-blue-500 rounded-full"
+                    className="w-2 h-2 bg-blue-400 rounded-full"
                     animate={{ 
-                      scale: [1, 1.2, 1],
-                      opacity: [0.5, 1, 0.5]
+                      scale: [1, 1.5, 1],
+                      opacity: [0.3, 1, 0.3]
                     }}
                     transition={{ 
-                      duration: 1,
+                      duration: 1.4,
                       repeat: Infinity,
+                      ease: "easeInOut",
                       delay: 0.2
                     }}
                   />
                   <motion.div 
-                    className="w-2 h-2 bg-blue-500 rounded-full"
+                    className="w-2 h-2 bg-blue-400 rounded-full"
                     animate={{ 
-                      scale: [1, 1.2, 1],
-                      opacity: [0.5, 1, 0.5]
+                      scale: [1, 1.5, 1],
+                      opacity: [0.3, 1, 0.3]
                     }}
                     transition={{ 
-                      duration: 1,
+                      duration: 1.4,
                       repeat: Infinity,
+                      ease: "easeInOut",
                       delay: 0.4
                     }}
                   />
                 </div>
                 
-                {/* 简洁的文字 */}
-                <span className="text-sm font-medium text-gray-600">
+                <span className="text-sm font-medium text-gray-500">
                   正在思考中...
                 </span>
               </div>
@@ -322,24 +350,24 @@ const ChatMessage = ({
         {isCompleted && (
           <motion.div 
             className="flex gap-3 items-center px-4 py-3 text-sm bg-green-50 rounded-xl border border-green-200 shadow-sm"
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
             transition={{ 
-              type: "spring", 
-              stiffness: 300, 
+              type: "spring",
+              stiffness: 400,
               damping: 25,
-              delay: 0.2 
+              duration: 0.5
             }}
-            whileHover={{ scale: 1.01 }}
+            whileHover={{ scale: 1.02 }}
           >
             <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
+              initial={{ scale: 0, rotate: -180 }}
+              animate={{ scale: 1, rotate: 0 }}
               transition={{ 
                 type: "spring",
                 stiffness: 500,
                 damping: 30,
-                delay: 0.3
+                duration: 0.6
               }}
             >
               <RiCheckFill className="text-green-600 size-5" />
@@ -358,22 +386,22 @@ const ChatMessage = ({
         {isStopped && (
           <motion.div 
             className="flex gap-3 items-center px-4 py-3 text-sm bg-orange-50 rounded-xl border border-orange-200 shadow-sm"
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
             transition={{ 
-              type: "spring", 
-              stiffness: 300, 
+              type: "spring",
+              stiffness: 400,
               damping: 25,
-              delay: 0.2 
+              duration: 0.5
             }}
-            whileHover={{ scale: 1.01 }}
+            whileHover={{ scale: 1.02 }}
           >
             <motion.div
               animate={{ 
-                rotate: [0, 10, -10, 0]
+                rotate: [0, 15, -15, 0]
               }}
               transition={{ 
-                duration: 2,
+                duration: 1.5,
                 repeat: Infinity,
                 ease: "easeInOut"
               }}

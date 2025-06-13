@@ -4,6 +4,7 @@ import React, { useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { RiSendPlaneFill, RiCheckLine } from "@remixicon/react";
+import { Languages } from "lucide-react";
 
 interface HtmlFormProps {
   htmlContent: string;
@@ -17,6 +18,44 @@ const HtmlForm: React.FC<HtmlFormProps> = ({
   isSubmitting = false,
 }) => {
   const formRef = useRef<HTMLDivElement>(null);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const [showAutoSubmitWarning, setShowAutoSubmitWarning] = React.useState(true);
+
+  // 默认表单数据
+  const defaultFormData: Record<string, string> = {
+    Languages: "zh",
+    message: ""
+  };
+
+  useEffect(() => {
+    // 清除之前的定时器
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+
+    // 设置5秒后自动提交的定时器
+    timerRef.current = setTimeout(() => {
+      if (!isSubmitting) {
+        onSubmit(defaultFormData);
+      }
+    }, 10000);
+
+    // 组件卸载时清除定时器
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, [isSubmitting, onSubmit]);
+
+  // 3秒后隐藏提示信息
+  useEffect(() => {
+    const warningTimer = setTimeout(() => {
+      setShowAutoSubmitWarning(false);
+    }, 3000);
+
+    return () => clearTimeout(warningTimer);
+  }, []);
 
   useEffect(() => {
     if (formRef.current) {
@@ -95,6 +134,21 @@ const HtmlForm: React.FC<HtmlFormProps> = ({
       
       {/* 渲染HTML表单 */}
       <div className="relative z-10">
+        {showAutoSubmitWarning && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="p-3 mb-4 text-sm text-amber-700 bg-amber-50 rounded-lg border border-amber-200"
+          >
+            <div className="flex gap-2 items-center">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+              <span>若5秒内未进行操作，系统将自动采用通用模式提交</span>
+            </div>
+          </motion.div>
+        )}
         <div 
           ref={formRef}
           className="space-y-4 html-form-container"

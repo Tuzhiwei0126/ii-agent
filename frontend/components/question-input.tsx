@@ -243,7 +243,7 @@ const QuestionInput = ({
               </TooltipTrigger>
               <TooltipContent>知识库</TooltipContent>
             </Tooltip>
-            {setIsUseDeepResearch && (
+            {/* {setIsUseDeepResearch && (
               <Button
                 variant="outline"
                 className={cn(
@@ -256,7 +256,7 @@ const QuestionInput = ({
               >
                 深度研究
               </Button>
-            )}
+            )} */}
           </div>
 
           <div className="flex gap-x-3 items-center">
