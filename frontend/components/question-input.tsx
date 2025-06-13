@@ -237,7 +237,7 @@ const QuestionInput = ({
                     : "border-[#6B48FF40] text-[#6B48FF] hover:bg-[#6B48FF10]"
                 )}
                 onClick={() => setIsUseDeepResearch?.(!isUseDeepResearch)}
-                disabled={isLoading}
+                // disabled={isLoading}
               >
                 深度研究
               </Button>

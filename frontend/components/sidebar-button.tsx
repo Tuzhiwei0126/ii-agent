@@ -97,12 +97,6 @@ const SidebarButton = ({ className, workspaceInfo }: SidebarButtonProps) => {
             className="overflow-hidden h-full bg-white"
           >
             <div className="flex gap-3 items-center p-4 bg-white border-b border-purple-100">
-              <div
-                className="flex justify-center items-center w-8 h-8 bg-purple-50 rounded-md cursor-pointer hover:bg-purple-100"
-                onClick={toggleSidebar}
-              >
-                <PanelLeft className="w-5 h-5 text-purple-600" />
-              </div>
               <div className="flex gap-2 items-center">
                 <Image
                   src="/logo-only.png"
@@ -161,7 +155,7 @@ const SidebarButton = ({ className, workspaceInfo }: SidebarButtonProps) => {
       </AnimatePresence>
 
       {/* 侧边栏按钮 */}
-      <div className="flex items-center">
+      <div className="flex items-start">
         <Button
           variant="ghost"
           size="icon"
