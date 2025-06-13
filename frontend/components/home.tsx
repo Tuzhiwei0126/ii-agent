@@ -1039,7 +1039,7 @@ export default function Home() {
                   }}
                   className="grid flex-1 grid-cols-9 pb-4 w-full min-h-0 write-report"
                 >
-                  <div className="col-span-4 pr-2 min-h-0">
+                  <div className="overflow-y-auto col-span-5 pr-2 min-h-0">
                     <div className="h-full">
                       <ChatMessage
                         messages={messages}
@@ -1068,7 +1068,7 @@ export default function Home() {
                     </div>
                   </div>
 
-                  <div className="flex flex-col col-span-5 p-4 min-h-0 bg-[#F9F8FF] rounded-2xl border shadow-lg border-purple-500/20">
+                  <div className="flex flex-col col-span-4 p-4 min-h-0 bg-[#F9F8FF] rounded-2xl border shadow-lg border-purple-500/20">
                     <div className="flex flex-shrink-0 justify-between items-center pb-4 bg-[#F9F8FF]">
                       <div className="flex gap-x-4">
                         <Button
@@ -1091,9 +1091,9 @@ export default function Home() {
                           variant="outline"
                           onClick={() => setActiveTab(TAB.CODE)}
                         >
-                          <RiCodeLine className="mr-2 size-4" /> Code
+                          <RiCodeLine className="mr-2 size-4" /> 代码
                         </Button>
-                        <Button
+                        {/* <Button
                           className={`cursor-pointer hover:!bg-purple-500/20 transition-all duration-200 ${
                             activeTab === TAB.TERMINAL
                               ? "bg-gradient-to-r from-purple-600 to-purple-800 !text-white shadow-md"
@@ -1103,7 +1103,7 @@ export default function Home() {
                           onClick={() => setActiveTab(TAB.TERMINAL)}
                         >
                           <RiTerminalLine className="mr-2 size-4" /> Terminal
-                        </Button>
+                        </Button> */}
                       </div>
                       <div className="relative">
                         <Button
@@ -1221,10 +1221,10 @@ export default function Home() {
                           filesContent={filesContent}
                           isReplayMode={isReplayMode}
                         />
-                        <Terminal
+                        {/* <Terminal
                           ref={xtermRef}
                           className={activeTab === TAB.TERMINAL ? "" : "hidden"}
-                        />
+                        /> */}
                       </div>
                     </div>
                   </div>

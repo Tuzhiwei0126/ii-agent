@@ -28,7 +28,7 @@ const FloatMenu: React.FC = () => {
     `}</style>
     <FloatButton.Group
       type="default"
-      style={{ insetInlineStart: -1820 }}
+      style={{ insetInlineStart: -1820, zIndex: 20}}
       icon={<MenuUnfoldOutlined />}
     >
       <FloatButton icon={<MenuUnfoldOutlined />} onClick={() => setIsSettingOpen(true)} />

@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { RiArrowUpLine, RiLoader2Line, RiAttachmentLine } from "@remixicon/react";
+import { RiLoader2Line, RiAttachmentLine, RiBookLine, RiSendPlaneFill } from "@remixicon/react";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
 import { useState, useEffect } from "react";
@@ -192,7 +192,7 @@ const QuestionInput = ({
             "w-full p-4 pb-[72px] rounded-2xl text-lg focus:ring-0 resize-none",
             "placeholder-gray-400 bg-white text-black border-none",
             "focus:shadow-[0_0_0_2px_rgba(107,72,255,0.3)]",
-            files.length > 0 ? "pt-24 h-60" : "h-50",
+            files.length > 0 ? "pt-24 h-60" : "h-40",
             textareaClassName
           )}
           placeholder={placeholder || "输入您的问题..."}
@@ -200,93 +200,112 @@ const QuestionInput = ({
           onChange={(e) => setValue(e.target.value)}
           onKeyDown={handleKeyDown}
         />
-        <div className="flex absolute bottom-0 justify-between items-center px-4 py-4 w-full bg-white rounded-b-2xl">
+        <div className="flex absolute bottom-0 justify-between items-center px-4 py-2 w-full bg-white rounded-b-2xl">
           <div className="flex gap-x-3 items-center">
             {handleFileUpload && (
-              <label htmlFor="file-upload" className="cursor-pointer">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="hover:bg-[#6B48FF10] size-10 rounded-lg cursor-pointer text-[#6B48FF]"
-                  onClick={() => document.getElementById("file-upload")?.click()}
-                  disabled={isUploading || isLoading}
-                >
-                  {isUploading ? (
-                    <RiLoader2Line className="animate-spin size-5" />
-                  ) : (
-                    <RiAttachmentLine className="size-5" />
-                  )}
-                </Button>
-                <input
-                  id="file-upload"
-                  type="file"
-                  multiple
-                  className="hidden"
-                  onChange={handleFileChange}
-                  disabled={isUploading || isLoading}
-                />
-              </label>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div className="relative">
+                    <div
+                      role="button"
+                      tabIndex={0}
+                      className="flex items-center justify-center hover:bg-[#8B5CF610] active:bg-[#8B5CF620] size-12 rounded-xl cursor-pointer text-[#8B5CF6] transition-all duration-200 hover:scale-105 active:scale-95 hover:text-[#7C3AED]"
+                      onClick={() => document.getElementById("file-upload")?.click()}
+                    >
+                      {isUploading ? (
+                        <RiLoader2Line className="animate-spin size-6" />
+                      ) : (
+                        <RiAttachmentLine className="size-6" />
+                      )}
+                    </div>
+                    <input
+                      id="file-upload"
+                      type="file"
+                      multiple
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                      onChange={handleFileChange}
+                      disabled={isUploading || isLoading}
+                    />
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>上传文件</TooltipContent>
+              </Tooltip>
             )}
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div
+                  role="button"
+                  tabIndex={0}
+                  className="flex items-center justify-center hover:bg-[#8B5CF610] active:bg-[#8B5CF620] size-12 rounded-xl cursor-pointer text-[#8B5CF6] transition-all duration-200 hover:scale-105 active:scale-95 hover:text-[#7C3AED]"
+                >
+                  <RiBookLine className="size-6" />
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>知识库</TooltipContent>
+            </Tooltip>
             {setIsUseDeepResearch && (
               <Button
                 variant="outline"
                 className={cn(
-                  "h-10 cursor-pointer rounded-lg border transition-colors",
+                  "h-12 px-4 cursor-pointer rounded-xl border transition-all duration-200 hover:scale-105 active:scale-95",
                   isUseDeepResearch
-                    ? "bg-[#6B48FF] text-white hover:bg-[#5A3CD9] border-[#6B48FF]"
-                    : "border-[#6B48FF40] text-[#6B48FF] hover:bg-[#6B48FF10]"
+                    ? "bg-[#8B5CF6] text-white hover:bg-[#7C3AED] border-[#8B5CF6] active:bg-[#7C3AED]"
+                    : "border-[#8B5CF640] text-[#8B5CF6] hover:bg-[#8B5CF610] active:bg-[#8B5CF620]"
                 )}
                 onClick={() => setIsUseDeepResearch?.(!isUseDeepResearch)}
-                // disabled={isLoading}
               >
                 深度研究
               </Button>
             )}
           </div>
 
-          <div className="flex gap-x-2 items-center">
+          <div className="flex gap-x-3 items-center">
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="hover:bg-[#6B48FF10] size-10 rounded-lg cursor-pointer text-[#6B48FF]"
+                <div
+                  role="button"
+                  tabIndex={0}
+                  className="flex items-center justify-center hover:bg-[#8B5CF610] active:bg-[#8B5CF620] size-12 rounded-xl cursor-pointer text-[#8B5CF6] transition-all duration-200 hover:scale-105 active:scale-95 hover:text-[#7C3AED]"
                   onClick={handleEnhancePrompt}
-                  disabled={isGeneratingPrompt}
                 >
                   {isGeneratingPrompt ? (
-                    <RiLoader2Line className="animate-spin size-5" />
+                    <RiLoader2Line className="animate-spin size-6" />
                   ) : (
                     <Image
                       src="/icons/AI.svg"
                       alt="Logo"
-                      width={24}
-                      height={24}
+                      width={28}
+                      height={28}
+                      className="transition-transform duration-200 hover:scale-110"
                     />
                   )}
-                </Button>
+                </div>
               </TooltipTrigger>
               <TooltipContent>优化提示词</TooltipContent>
             </Tooltip>
             {isLoading && handleCancel ? (
-              <Button
+              <div
+                role="button"
+                tabIndex={0}
+                className="flex items-center justify-center hover:bg-[#8B5CF610] active:bg-[#8B5CF620] size-12 rounded-xl cursor-pointer text-[#8B5CF6] transition-all duration-200 hover:scale-105 active:scale-95 hover:text-[#7C3AED]"
                 onClick={handleCancel}
-                className="p-0 font-bold bg-gray-100 rounded-lg transition-colors cursor-pointer size-10 hover:bg-gray-200"
               >
-                <div className="bg-gray-600 size-3 rounded-xs" />
-              </Button>
+                <div className="bg-[#8B5CF6] size-4 rounded-xs" />
+              </div>
             ) : (
-              <Button
-                disabled={!value.trim() || isDisabled || isLoading}
-                onClick={() => handleSubmit(value)}
+              <div
+                role="button"
+                tabIndex={0}
                 className={cn(
-                  "cursor-pointer size-10 font-bold rounded-lg transition-colors",
-                  "bg-[#6B48FF] hover:bg-[#5A3CD9] text-white",
-                  "disabled:bg-gray-100 disabled:text-gray-400"
+                  "flex items-center justify-center size-12 rounded-xl cursor-pointer transition-all duration-200 hover:scale-105 active:scale-95",
+                  "bg-[#8B5CF6] hover:bg-[#7C3AED] active:bg-[#7C3AED] text-white",
+                  "disabled:bg-[#8B5CF610] disabled:text-[#8B5CF650] disabled:hover:scale-100 disabled:active:scale-100",
+                  (!value.trim() || isDisabled || isLoading) && "opacity-50 cursor-not-allowed"
                 )}
+                onClick={() => !isDisabled && !isLoading && value.trim() && handleSubmit(value)}
               >
-                <RiArrowUpLine className="size-5" />
-              </Button>
+                <RiSendPlaneFill className="size-6" />
+              </div>
             )}
           </div>
         </div>

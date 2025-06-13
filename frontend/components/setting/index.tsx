@@ -90,7 +90,7 @@ export default function SettingModal({ isOpen, onClose, defaultTab = 'account' }
   const activeItem = settingItems.find(item => item.id === activeTab)
 
   return (
-    <div className="flex fixed inset-0 z-50 justify-center items-center backdrop-blur-sm bg-black/20">
+    <div className="flex fixed inset-0 justify-center items-center backdrop-blur-sm z-200 bg-black/20">
       <div className="w-full max-w-7xl h-[85vh] bg-white rounded-2xl shadow-2xl flex overflow-hidden animate-in fade-in duration-300">
         {/* 左侧菜单 */}
         <div className="flex flex-col w-56 bg-gradient-to-b from-gray-50 border-r to-gray-100/50 border-gray-200/60">
