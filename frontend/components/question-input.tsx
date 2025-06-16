@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { RiLoader2Line, RiAttachmentLine, RiBookLine, RiSendPlaneFill } from "@remixicon/react";
+import { RiLoader2Line, RiAttachmentLine, RiBookLine, RiSendPlaneFill, RiCloseLine, RiImageLine, RiFileLine } from "@remixicon/react";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
 import { useState, useEffect } from "react";
@@ -7,6 +7,13 @@ import { getFileIconAndColor } from "@/utils/file-utils";
 import Image from "next/image";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import { cn } from "@/lib/utils";
+
+interface Tag {
+  id: string;
+  type: 'member' | 'image' | 'file';
+  name: string;
+  avatar?: string;
+}
 
 interface FileUploadStatus {
   name: string;
@@ -54,6 +61,16 @@ const QuestionInput = ({
   handleCancel,
 }: QuestionInputProps) => {
   const [files, setFiles] = useState<FileUploadStatus[]>([]);
+  const [tags, setTags] = useState<Tag[]>([
+    { id: '1', type: 'member', name: '张总', avatar: '/roles/og_act1.png' },
+    { id: '2', type: 'member', name: '李专员', avatar: '/roles/og_act2.png' },
+    { id: '3', type: 'image', name: '图片1.jpg' },
+    { id: '4', type: 'file', name: '文档.pdf' },
+  ]);
+
+  const removeTag = (tagId: string) => {
+    setTags(tags.filter(tag => tag.id !== tagId));
+  };
 
   // Clean up object URLs when component unmounts
   useEffect(() => {
@@ -136,6 +153,47 @@ const QuestionInput = ({
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.1 }}
       >
+        {tags.length > 0 && (
+          <div className="flex flex-wrap gap-1.5 px-3 py-2 border-b border-gray-100">
+            {tags.map((tag) => (
+              <div
+                key={tag.id}
+                className={cn(
+                  "flex items-center gap-1.5 px-2 py-0.5 text-sm",
+                  tag.type === 'member' && "bg-[#8B5CF610] text-[#8B48FF]",
+                  tag.type === 'image' && "bg-[#10B98110] text-[#10B981]",
+                  tag.type === 'file' && "bg-[#F59E0B10] text-[#F59E0B]"
+                )}
+              >
+                {tag.type === 'member' && (
+                  <>
+                    <span className="text-[#8B48FF] font-medium">@</span>
+                    <img src={tag.avatar} alt={tag.name} className="w-5 h-5 rounded-full" />
+                    <span className="text-xs font-medium">{tag.name}</span>
+                  </>
+                )}
+                {tag.type === 'image' && (
+                  <>
+                    <RiImageLine className="size-4" />
+                    <span className="text-xs">{tag.name}</span>
+                  </>
+                )}
+                {tag.type === 'file' && (
+                  <>
+                    <RiFileLine className="size-4" />
+                    <span className="text-xs">{tag.name}</span>
+                  </>
+                )}
+                <button
+                  onClick={() => removeTag(tag.id)}
+                  className="hover:bg-black/5 p-0.5"
+                >
+                  <RiCloseLine className="size-3" />
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
         {files.length > 0 && (
           <div className="flex overflow-auto absolute right-2 top-4 left-4 z-10 gap-2 items-center">
             {files.map((file) => {
@@ -192,7 +250,8 @@ const QuestionInput = ({
             "w-full p-4 pb-[72px] rounded-2xl text-lg focus:ring-0 resize-none",
             "placeholder-gray-400 bg-white text-black border-none",
             "focus:shadow-[0_0_0_2px_rgba(107,72,255,0.3)]",
-            files.length > 0 ? "pt-24 h-60" : "h-40",
+            files.length > 0 ? "pt-24 h-45" : "h-35",
+            tags.length > 0 && "pt-4",
             textareaClassName
           )}
           placeholder={placeholder || "输入您的问题..."}

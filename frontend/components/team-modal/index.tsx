@@ -67,6 +67,8 @@ export default function TeamModal({
       title: '行政经理',
       level: '初级',
       description: '专注于处理日常行政事务，协调会议安排',
+      avatar_small_url: '/roles/og_act5.png',
+      avatar_large_url: '/roles/og_card.png',
     },
     {
       id: '2',
@@ -75,6 +77,8 @@ export default function TeamModal({
       title: '技术专家',
       level: '高级',
       description: '解决复杂技术问题，提供专业技术支持',
+      avatar_small_url: '/roles/og_act3.png',
+      avatar_large_url: '/roles/og_card.png',
     },
     {
       id: '3',
@@ -83,6 +87,8 @@ export default function TeamModal({
       title: '营销顾问',
       level: '中级',
       description: '制定营销策略，分析市场趋势',
+      avatar_small_url: '/roles/og_act4.png',
+      avatar_large_url: '/roles/og_card.png',
     },
     {
       id: '4',
@@ -91,6 +97,8 @@ export default function TeamModal({
       title: '财务分析师',
       level: '高级',
       description: '财务规划与分析，成本控制',
+      avatar_small_url: '/roles/og_act5.png',
+      avatar_large_url: '/roles/og_card.png',
     },
   ]
   const activeRole = roles.find(role => role.name === activeTab) || roles[0]
@@ -306,7 +314,9 @@ export default function TeamModal({
                     {/* 添加发光效果 */}
                     <div className="pointer-events-none absolute inset-0 rounded-lg bg-gradient-to-b from-[#6b47ff]/5 to-transparent"></div>
 
-                    <img src={activeRole.avatar_large_url} alt="" className="relative z-10 mb-4" />
+                    {/* <img src={activeRole.avatar_large_url} alt="" className="relative z-10 mb-4" />
+                     */}
+                    <img src='/roles/og_card.png' alt="" className="relative z-10 mb-4" />
 
                     {/* 添加能量条 */}
                     <div className="mb-4 h-2 w-full overflow-hidden rounded-full bg-[#e6e0ff]">
@@ -314,7 +324,7 @@ export default function TeamModal({
                     </div>
 
                     <button onClick={() => {
-                      router.push('/explore/installed/21197408-c713-4ca0-8fbb-8e972de60e5c')
+                      router.push('/')
                     }} className="group relative z-10 w-full overflow-hidden rounded-full bg-[#6b47ff] px-6 py-2.5 font-medium text-white transition-colors hover:bg-[#452cae]">
                       <span className="relative z-10">开始对话</span>
                       <div className="absolute inset-0 animate-[shimmer_1s_ease-in-out_infinite] bg-gradient-to-r from-transparent via-[#ffffff]/20 to-transparent opacity-0 transition-opacity group-hover:opacity-100"></div>

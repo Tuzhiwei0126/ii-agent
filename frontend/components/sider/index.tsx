@@ -16,7 +16,7 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { id: 1, name: '角色库', icon: <User size={18} />, path: '/roles' },
-  { id: 2, name: '聊天', icon: <MessageSquare size={18} />, path: '/chat' },
+  { id: 2, name: '聊天', icon: <MessageSquare size={18} />, path: '/' },
   { id: 3, name: '知识库', icon: <Book size={18} />, path: '/datasets'},
 ]
 
@@ -80,10 +80,9 @@ export default function Sidebar() {
       } h-screen bg-white  border-gray-200 flex flex-col transition-all duration-300 px-3 py-6`}
     >
       {/* Logo + Toggle */}
-      <div className="flex justify-between items-center px-1 mb-8">
-        <div className="flex gap-2 items-center">
-          <Image src="/logo.png" alt="GoAgent" width={24} height={24} />
-          {!collapsed && <span className="text-lg font-bold text-purple-600">GoAgent</span>}
+      <div className="flex justify-between items-center px-1 my-6">
+        <div className="flex gap-2 justify-center items-center mx-auto">
+        {!collapsed ? <Image src="/logo_副本2.png" alt="GoAgent" width={200} height={200} /> :''}
         </div>
         <button
           onClick={() => setCollapsed(!collapsed)}
