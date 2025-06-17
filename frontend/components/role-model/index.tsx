@@ -200,8 +200,14 @@ export default function RoleModel({
                       <div className="h-full w-[85%] animate-pulse rounded-full bg-gradient-to-r from-[#6b47ff] to-[#9c82ff]"></div>
                     </div>
 
-                    <button className="group relative z-10 w-full overflow-hidden rounded-full bg-[#6b47ff] px-6 py-2.5 font-medium text-white transition-colors hover:bg-[#452cae]">
-                      <span className="relative z-10" onClick={() => router.push(`/`)}>开始对话</span>
+                    <button 
+                      onClick={() => {
+                        onClose();
+                        window.location.href = '/';
+                      }}
+                      className="group relative z-10 w-full overflow-hidden rounded-full bg-[#6b47ff] px-6 py-2.5 font-medium text-white transition-colors hover:bg-[#452cae]"
+                    >
+                      <span className="relative z-10">开始对话</span>
                       <div className="absolute inset-0 animate-[shimmer_1s_ease-in-out_infinite] bg-gradient-to-r from-transparent via-[#ffffff]/20 to-transparent opacity-0 transition-opacity group-hover:opacity-100"></div>
                     </button>
                   </div>
